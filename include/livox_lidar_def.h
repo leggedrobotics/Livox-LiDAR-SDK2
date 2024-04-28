@@ -247,7 +247,7 @@ typedef enum {
 
 typedef enum {
   kLivoxLidarNormal = 0x01,
-  kLivoxLidarWakeUp = 0x02,
+  kLivoxLidarStandBy = 0x02,
   kLivoxLidarSleep = 0x03,
   kLivoxLidarError = 0x04,
   kLivoxLidarPowerOnSelfTest = 0x05,

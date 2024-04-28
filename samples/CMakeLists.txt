@@ -16,6 +16,8 @@ if (UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 endif(UNIX)
 
+add_subdirectory(enable_lidar_workmode)
+add_subdirectory(disable_lidar_workmode)
 add_subdirectory(livox_lidar_quick_start)
 add_subdirectory(multi_lidars_upgrade)
 add_subdirectory(logger)
