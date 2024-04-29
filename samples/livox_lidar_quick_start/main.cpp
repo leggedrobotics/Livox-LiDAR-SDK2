@@ -204,11 +204,8 @@ int main(int argc, const char *argv[]) {
   // REQUIRED, to get a handle to targeted lidar and set its work mode to NORMAL
   SetLivoxLidarInfoChangeCallback(LidarInfoChangeCallback, nullptr);
 
-#ifdef WIN32
-  Sleep(300000);
-#else
-  sleep(300);
-#endif
+
+  sleep(4);
   LivoxLidarSdkUninit();
   printf("Livox Quick Start Demo End!\n");
   return 0;

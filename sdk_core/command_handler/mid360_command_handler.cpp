@@ -61,10 +61,10 @@ bool Mid360CommandHandler::Init(const std::map<uint32_t, LivoxLidarCfg>& custom_
 
 void Mid360CommandHandler::Handle(const uint32_t handle, uint16_t lidar_port, const Command& command) {
   if (command.packet.cmd_type == kCommandTypeAck) {
-    LOG_INFO(" Receive Ack: Id {} Seq {}", command.packet.cmd_id, command.packet.seq_num);
+    //LOG_DEBUG(" Receive Ack: Id {} Seq {}", command.packet.cmd_id, command.packet.seq_num);
     OnCommandAck(handle, command);
   } else if (command.packet.cmd_type == kCommandTypeCmd) {
-    LOG_INFO(" Receive Command: Id {} Seq {}", command.packet.cmd_id, command.packet.seq_num);
+    //LOG_DEBUG(" Receive Command: Id {} Seq {}", command.packet.cmd_id, command.packet.seq_num);
     OnCommandCmd(handle, lidar_port, command);
   }
 }

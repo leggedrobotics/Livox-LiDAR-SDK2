@@ -72,7 +72,7 @@ void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, 
   } 
 
   printf("LidarInfoChangeCallback Lidar handle: %u SN: %s\n", handle, info->sn);
-  sleep(2);
+  sleep(0.5);
   SetLivoxLidarWorkMode(handle, kLivoxLidarStandBy, WorkModeCallback, nullptr);
 
   //SetLivoxLidarDebugPointCloud(handle, true, DebugPointCloudCallback, nullptr);
@@ -111,11 +111,12 @@ int main(int argc, const char *argv[]) {
   }
 
   SetLivoxLidarInfoCallback(LivoxLidarPushMsgCallback, nullptr);
+  sleep(0.5);
   SetLivoxLidarInfoChangeCallback(LidarInfoChangeCallback, nullptr);
     
   // capture Ctrl + C signal.
   //std::signal(SIGINT, Stop);
-  while(test <= 1.0) {
+  /*while(test <= 1.0) {
     {
       std::unique_lock<std::mutex> lock(mtx);
       cv.wait(lock);
@@ -123,13 +124,13 @@ int main(int argc, const char *argv[]) {
     //UpgradeLivoxLidars(handles.data(), handles.size());
     --test;
     break;
-  }
+  }*/
 
-  printf("Deivice Logger exit.\n");
+  printf("Device Logger exit.\n");
 
-  sleep(3000000); // 3sec?
+  sleep(4); // 3sec?
   LivoxLidarSdkUninit();
-	printf("Livox End!\n");
+  printf("Livox Disable script completed!\n");
   return 0;
 }
 
