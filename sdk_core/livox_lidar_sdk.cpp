@@ -35,14 +35,13 @@
 #include "logger_handler/logger_manager.h"
 #include "upgrade_manager.h"
 
-
 #include "parse_cfg_file.h"
 #include "params_check.h"
 #include "device_manager.h"
 
 #ifdef WIN32
-#include<winsock2.h>
-#endif // WIN32
+#include <winsock2.h>
+#endif  // WIN32
 
 #include <memory>
 #include <vector>
@@ -51,52 +50,66 @@ using namespace livox::lidar;
 
 static bool is_initialized = false;
 
-void GetLivoxLidarSdkVer(LivoxLidarSdkVer *version) {
-  if (version != NULL) {
+void GetLivoxLidarSdkVer(LivoxLidarSdkVer* version)
+{
+  if (version != NULL)
+  {
     version->major = LIVOX_LIDAR_SDK_MAJOR_VERSION;
     version->minor = LIVOX_LIDAR_SDK_MINOR_VERSION;
     version->patch = LIVOX_LIDAR_SDK_PATCH_VERSION;
   }
 }
 
-bool LivoxLidarSdkInit(const char* path, const char* host_ip, const LivoxLidarLoggerCfgInfo* log_cfg_info) {
-  if (is_initialized) {
+bool LivoxLidarSdkInit(const char* path, const char* host_ip, const LivoxLidarLoggerCfgInfo* log_cfg_info)
+{
+  if (is_initialized)
+  {
     return false;
   }
 
 #ifdef WIN32
   WORD sockVersion = MAKEWORD(2, 0);
   WSADATA wsdata;
-  if (WSAStartup(sockVersion, &wsdata) != 0) {
+  if (WSAStartup(sockVersion, &wsdata) != 0)
+  {
     return false;
   }
-#endif // WIN32
+#endif  // WIN32
 
   InitLogger();
 
-  if (path == NULL && host_ip == NULL) {
+  if (path == NULL && host_ip == NULL)
+  {
     return false;
   }
 
-  if (path) {
+  if (path)
+  {
     std::shared_ptr<std::vector<LivoxLidarCfg>> lidars_cfg_ptr = nullptr;
     std::shared_ptr<std::vector<LivoxLidarCfg>> custom_lidars_cfg_ptr = nullptr;
     std::shared_ptr<LivoxLidarLoggerCfg> lidar_logger_cfg_ptr = nullptr;
     std::shared_ptr<LivoxLidarSdkFrameworkCfg> sdk_framework_cfg_ptr = nullptr;
 
-    if (!ParseCfgFile(path).Parse(lidars_cfg_ptr, custom_lidars_cfg_ptr, lidar_logger_cfg_ptr, sdk_framework_cfg_ptr)) {
+    if (!ParseCfgFile(path).Parse(lidars_cfg_ptr, custom_lidars_cfg_ptr, lidar_logger_cfg_ptr, sdk_framework_cfg_ptr))
+    {
       return false;
     }
 
-    if (!ParamsCheck(lidars_cfg_ptr, custom_lidars_cfg_ptr).Check()) {
+    if (!ParamsCheck(lidars_cfg_ptr, custom_lidars_cfg_ptr).Check())
+    {
       return false;
     }
 
-    if (!DeviceManager::GetInstance().Init(lidars_cfg_ptr, custom_lidars_cfg_ptr, lidar_logger_cfg_ptr, sdk_framework_cfg_ptr)) {
+    if (!DeviceManager::GetInstance().Init(lidars_cfg_ptr, custom_lidars_cfg_ptr, lidar_logger_cfg_ptr,
+                                           sdk_framework_cfg_ptr))
+    {
       return false;
     }
-  } else {
-    if (!DeviceManager::GetInstance().Init(host_ip, log_cfg_info)) {
+  }
+  else
+  {
+    if (!DeviceManager::GetInstance().Init(host_ip, log_cfg_info))
+    {
       return false;
     }
   }
@@ -105,16 +118,18 @@ bool LivoxLidarSdkInit(const char* path, const char* host_ip, const LivoxLidarLo
   return true;
 }
 
-void LivoxLidarSdkUninit() {
-  if (!is_initialized) {
+void LivoxLidarSdkUninit()
+{
+  if (!is_initialized)
+  {
     return;
   }
 
   LoggerManager::GetInstance().Destory();
   // The reason for using WSACleanup() after previous statement is that Destory() still needs to send socket messages.
 #ifdef WIN32
-    WSACleanup();
-#endif // WIN32
+  WSACleanup();
+#endif  // WIN32
   DeviceManager::GetInstance().Destory();
   DataHandler::GetInstance().Destory();
   GeneralCommandHandler::GetInstance().Destory();
@@ -123,211 +138,276 @@ void LivoxLidarSdkUninit() {
   is_initialized = false;
 }
 
-bool LivoxLidarSdkStart() {
+bool LivoxLidarSdkStart()
+{
   return true;
 }
 
-void SaveLivoxLidarSdkLoggerFile() {
+void SaveLivoxLidarSdkLoggerFile()
+{
   is_save_log_file = true;
 }
 
-void DisableLivoxSdkConsoleLogger() {
+void DisableLivoxSdkConsoleLogger()
+{
   is_console_log_enable = false;
 }
 
-uint16_t LivoxLidarAddPointCloudObserver(LivoxLidarPointCloudObserver cb, void *client_data) {
+uint16_t LivoxLidarAddPointCloudObserver(LivoxLidarPointCloudObserver cb, void* client_data)
+{
   return DataHandler::GetInstance().AddPointCloudObserver(cb, client_data);
 }
 
-void LivoxLidarRemovePointCloudObserver(uint16_t id) {
+void LivoxLidarRemovePointCloudObserver(uint16_t id)
+{
   DataHandler::GetInstance().RemovePointCloudObserver(id);
 }
 
-void SetLivoxLidarPointCloudCallBack(LivoxLidarPointCloudCallBack cb, void *client_data) {
+void SetLivoxLidarPointCloudCallBack(LivoxLidarPointCloudCallBack cb, void* client_data)
+{
   DataHandler::GetInstance().SetPointDataCallback(cb, client_data);
 }
 
-void LivoxLidarAddCmdObserver(LivoxLidarCmdObserverCallBack cb, void *client_data) {
+void LivoxLidarAddCmdObserver(LivoxLidarCmdObserverCallBack cb, void* client_data)
+{
   GeneralCommandHandler::GetInstance().LivoxLidarAddCmdObserver(cb, client_data);
 }
 
-void LivoxLidarRemoveCmdObserver() {
+void LivoxLidarRemoveCmdObserver()
+{
   GeneralCommandHandler::GetInstance().LivoxLidarRemoveCmdObserver();
 }
 
-void SetLivoxLidarImuDataCallback(LivoxLidarImuDataCallback cb, void* client_data) {
+void SetLivoxLidarImuDataCallback(LivoxLidarImuDataCallback cb, void* client_data)
+{
   DataHandler::GetInstance().SetImuDataCallback(cb, client_data);
 }
 
-void SetLivoxLidarInfoCallback(LivoxLidarInfoCallback cb, void* client_data) {
+void SetLivoxLidarInfoCallback(LivoxLidarInfoCallback cb, void* client_data)
+{
   GeneralCommandHandler::GetInstance().SetLivoxLidarInfoCallback(cb, client_data);
 }
 
-void SetLivoxLidarInfoChangeCallback(LivoxLidarInfoChangeCallback cb, void* client_data) {
+void SetLivoxLidarInfoChangeCallback(LivoxLidarInfoChangeCallback cb, void* client_data)
+{
   GeneralCommandHandler::GetInstance().SetLivoxLidarInfoChangeCallback(cb, client_data);
 }
 
-livox_status QueryLivoxLidarInternalInfo(uint32_t handle, QueryLivoxLidarInternalInfoCallback cb, void* client_data) {
+livox_status QueryLivoxLidarInternalInfo(uint32_t handle, QueryLivoxLidarInternalInfoCallback cb, void* client_data)
+{
   return CommandImpl::QueryLivoxLidarInternalInfo(handle, cb, client_data);
 }
 
-livox_status QueryLivoxLidarFwType(uint32_t handle, QueryLivoxLidarInternalInfoCallback cb, void* client_data) {
+livox_status QueryLivoxLidarFwType(uint32_t handle, QueryLivoxLidarInternalInfoCallback cb, void* client_data)
+{
   return CommandImpl::QueryLivoxLidarFwType(handle, cb, client_data);
 }
 
-livox_status QueryLivoxLidarFirmwareVer(uint32_t handle, QueryLivoxLidarInternalInfoCallback cb, void* client_data) {
+livox_status QueryLivoxLidarFirmwareVer(uint32_t handle, QueryLivoxLidarInternalInfoCallback cb, void* client_data)
+{
   return CommandImpl::QueryLivoxLidarFirmwareVer(handle, cb, client_data);
 }
 
-livox_status SetLivoxLidarPclDataType(uint32_t handle, LivoxLidarPointDataType data_type, LivoxLidarAsyncControlCallback cb, void* client_data) {
-  if (data_type == kLivoxLidarImuData) {
+livox_status SetLivoxLidarPclDataType(uint32_t handle, LivoxLidarPointDataType data_type,
+                                      LivoxLidarAsyncControlCallback cb, void* client_data)
+{
+  if (data_type == kLivoxLidarImuData)
+  {
     return EnableLivoxLidarImuData(handle, cb, client_data);
   }
   return CommandImpl::SetLivoxLidarPclDataType(handle, data_type, cb, client_data);
 }
 
-livox_status SetLivoxLidarScanPattern(uint32_t handle, LivoxLidarScanPattern scan_pattern, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarScanPattern(uint32_t handle, LivoxLidarScanPattern scan_pattern,
+                                      LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarScanPattern(handle, scan_pattern, cb, client_data);
 }
 
-livox_status SetLivoxLidarDualEmit(uint32_t handle, bool enable, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarDualEmit(uint32_t handle, bool enable, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarDualEmit(handle, enable, cb, client_data);
 }
 
-livox_status EnableLivoxLidarPointSend(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status EnableLivoxLidarPointSend(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::EnableLivoxLidarPointSend(handle, cb, client_data);
 }
-livox_status DisableLivoxLidarPointSend(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status DisableLivoxLidarPointSend(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::DisableLivoxLidarPointSend(handle, cb, client_data);
 }
 
-livox_status SetLivoxLidarIp(uint32_t handle, LivoxLidarIpInfo* ip_config,
-    LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarIp(uint32_t handle, LivoxLidarIpInfo* ip_config, LivoxLidarAsyncControlCallback cb,
+                             void* client_data)
+{
   return CommandImpl::SetLivoxLidarIp(handle, ip_config, cb, client_data);
 }
 
 livox_status SetLivoxLidarStateInfoHostIPCfg(uint32_t handle, HostStateInfoIpInfo* host_state_info_ipcfg,
-    LivoxLidarAsyncControlCallback cb, void* client_data) {
+                                             LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarStateInfoHostIPCfg(handle, *host_state_info_ipcfg, cb, client_data);
 }
 
 livox_status SetLivoxLidarPointDataHostIPCfg(uint32_t handle, HostPointIPInfo* host_point_ipcfg,
-    LivoxLidarAsyncControlCallback cb, void* client_data) {
+                                             LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarPointDataHostIPCfg(handle, *host_point_ipcfg, cb, client_data);
 }
 
 livox_status SetLivoxLidarImuDataHostIPCfg(uint32_t handle, HostImuDataIPInfo* host_imu_ipcfg,
-  LivoxLidarAsyncControlCallback cb, void* client_data) {
+                                           LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarImuDataHostIPCfg(handle, *host_imu_ipcfg, cb, client_data);
 }
 
 livox_status SetLivoxLidarInstallAttitude(uint32_t handle, LivoxLidarInstallAttitude* install_attitude,
-    LivoxLidarAsyncControlCallback cb, void* client_data) {
+                                          LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarInstallAttitude(handle, *install_attitude, cb, client_data);
 }
 
-livox_status SetLivoxLidarFovCfg0(uint32_t handle, FovCfg* fov_cfg0, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarFovCfg0(uint32_t handle, FovCfg* fov_cfg0, LivoxLidarAsyncControlCallback cb,
+                                  void* client_data)
+{
   return CommandImpl::SetLivoxLidarFovCfg0(handle, *fov_cfg0, cb, client_data);
 }
 
-livox_status SetLivoxLidarFovCfg1(uint32_t handle, FovCfg* fov_cfg1, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarFovCfg1(uint32_t handle, FovCfg* fov_cfg1, LivoxLidarAsyncControlCallback cb,
+                                  void* client_data)
+{
   return CommandImpl::SetLivoxLidarFovCfg1(handle, *fov_cfg1, cb, client_data);
 }
 
-livox_status EnableLivoxLidarFov(uint32_t handle, uint8_t fov_en, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status EnableLivoxLidarFov(uint32_t handle, uint8_t fov_en, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::EnableLivoxLidarFov(handle, fov_en, cb, client_data);
 }
 
-livox_status DisableLivoxLidarFov(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status DisableLivoxLidarFov(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::DisableLivoxLidarFov(handle, cb, client_data);
 }
 
-livox_status SetLivoxLidarDetectMode(uint32_t handle, LivoxLidarDetectMode mode, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarDetectMode(uint32_t handle, LivoxLidarDetectMode mode, LivoxLidarAsyncControlCallback cb,
+                                     void* client_data)
+{
   return CommandImpl::SetLivoxLidarDetectMode(handle, mode, cb, client_data);
 }
 
-livox_status SetLivoxLidarFuncIOCfg(uint32_t handle, FuncIOCfg* func_io_cfg, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarFuncIOCfg(uint32_t handle, FuncIOCfg* func_io_cfg, LivoxLidarAsyncControlCallback cb,
+                                    void* client_data)
+{
   return CommandImpl::SetLivoxLidarFuncIOCfg(handle, *func_io_cfg, cb, client_data);
 }
 
-livox_status SetLivoxLidarBlindSpot(uint32_t handle, uint32_t blind_spot, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarBlindSpot(uint32_t handle, uint32_t blind_spot, LivoxLidarAsyncControlCallback cb,
+                                    void* client_data)
+{
   return CommandImpl::SetLivoxLidarBlindSpot(handle, blind_spot, cb, client_data);
 }
 
-livox_status SetLivoxLidarWorkMode(uint32_t handle, LivoxLidarWorkMode work_mode, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarWorkMode(uint32_t handle, LivoxLidarWorkMode work_mode, LivoxLidarAsyncControlCallback cb,
+                                   void* client_data)
+{
   return CommandImpl::SetLivoxLidarWorkMode(handle, work_mode, cb, client_data);
 }
 
-livox_status EnableLivoxLidarGlassHeat(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status EnableLivoxLidarGlassHeat(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::EnableLivoxLidarGlassHeat(handle, cb, client_data);
 }
-livox_status DisableLivoxLidarGlassHeat(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status DisableLivoxLidarGlassHeat(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::DisableLivoxLidarGlassHeat(handle, cb, client_data);
 }
-livox_status SetLivoxLidarGlassHeat(uint32_t handle, LivoxLidarGlassHeat glass_heat, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status SetLivoxLidarGlassHeat(uint32_t handle, LivoxLidarGlassHeat glass_heat, LivoxLidarAsyncControlCallback cb,
+                                    void* client_data)
+{
   return CommandImpl::SetLivoxLidarGlassHeat(handle, glass_heat, cb, client_data);
 }
 
-livox_status StartForcedHeating(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status StartForcedHeating(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::StartForcedHeating(handle, cb, client_data);
 }
 
-livox_status StopForcedHeating(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status StopForcedHeating(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::StopForcedHeating(handle, cb, client_data);
 }
 
-livox_status EnableLivoxLidarImuData(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status EnableLivoxLidarImuData(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::EnableLivoxLidarImuData(handle, cb, client_data);
 }
-livox_status DisableLivoxLidarImuData(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status DisableLivoxLidarImuData(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::DisableLivoxLidarImuData(handle, cb, client_data);
 }
 
-livox_status EnableLivoxLidarFusaFunciont(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status EnableLivoxLidarFusaFunciont(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::EnableLivoxLidarFusaFunciont(handle, cb, client_data);
 }
-livox_status DisableLivoxLidarFusaFunciont(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data) {
+livox_status DisableLivoxLidarFusaFunciont(uint32_t handle, LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::DisableLivoxLidarFusaFunciont(handle, cb, client_data);
 }
 
-livox_status SetLivoxLidarDebugPointCloud(uint32_t handle, bool enable, LivoxLidarLoggerCallback cb, void* client_data) {
+livox_status SetLivoxLidarDebugPointCloud(uint32_t handle, bool enable, LivoxLidarLoggerCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarDebugPointCloud(handle, enable, cb, client_data);
 }
 
-livox_status SetLivoxLidarRmcSyncTime(uint32_t handle, const char* rmc, uint16_t rmc_length, LivoxLidarRmcSyncTimeCallBack cb, void* client_data) {
+livox_status SetLivoxLidarRmcSyncTime(uint32_t handle, const char* rmc, uint16_t rmc_length,
+                                      LivoxLidarRmcSyncTimeCallBack cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarRmcSyncTime(handle, rmc, rmc_length, cb, client_data);
 }
 
-livox_status SetLivoxLidarWorkModeAfterBoot(const uint32_t handle,const LivoxLidarWorkModeAfterBoot work_mode, LivoxLidarAsyncControlCallback cb, void* client_data){
+livox_status SetLivoxLidarWorkModeAfterBoot(const uint32_t handle, const LivoxLidarWorkModeAfterBoot work_mode,
+                                            LivoxLidarAsyncControlCallback cb, void* client_data)
+{
   return CommandImpl::SetLivoxLidarWorkModeAfterBoot(handle, work_mode, cb, client_data);
 }
 
 // reset lidar
-livox_status LivoxLidarRequestReset(uint32_t handle, LivoxLidarResetCallback cb, void* client_data) {
+livox_status LivoxLidarRequestReset(uint32_t handle, LivoxLidarResetCallback cb, void* client_data)
+{
   return CommandImpl::LivoxLidarRequestReset(handle, cb, client_data);
 }
 
-livox_status LivoxLidarRequestReboot(uint32_t handle, LivoxLidarRebootCallback cb, void* client_data) {
+livox_status LivoxLidarRequestReboot(uint32_t handle, LivoxLidarRebootCallback cb, void* client_data)
+{
   return CommandImpl::LivoxLidarRequestReboot(handle, cb, client_data);
 }
 
 // upgrade
-bool SetLivoxLidarUpgradeFirmwarePath(const char* firmware_path) {
+bool SetLivoxLidarUpgradeFirmwarePath(const char* firmware_path)
+{
   return UpgradeManager::GetInstance().SetLivoxLidarUpgradeFirmwarePath(firmware_path);
 }
 
-void SetLivoxLidarUpgradeProgressCallback(OnLivoxLidarUpgradeProgressCallback cb, void* client_data) {
+void SetLivoxLidarUpgradeProgressCallback(OnLivoxLidarUpgradeProgressCallback cb, void* client_data)
+{
   UpgradeManager::GetInstance().SetLivoxLidarUpgradeProgressCallback(cb, client_data);
 }
 
-void UpgradeLivoxLidars(const uint32_t* handle, const uint8_t lidar_num) {
+void UpgradeLivoxLidars(const uint32_t* handle, const uint8_t lidar_num)
+{
   UpgradeManager::GetInstance().UpgradeLivoxLidars(handle, lidar_num);
 }
 
-livox_status LivoxLidarStartLogger(const uint32_t handle, const LivoxLidarLogType log_type, LivoxLidarLoggerCallback cb, void* client_data) {
+livox_status LivoxLidarStartLogger(const uint32_t handle, const LivoxLidarLogType log_type, LivoxLidarLoggerCallback cb,
+                                   void* client_data)
+{
   return LoggerManager::GetInstance().StartLogger(handle, log_type, cb, client_data);
 }
 
-livox_status LivoxLidarStopLogger(const uint32_t handle, const LivoxLidarLogType log_type, LivoxLidarLoggerCallback cb, void* client_data) {
+livox_status LivoxLidarStopLogger(const uint32_t handle, const LivoxLidarLogType log_type, LivoxLidarLoggerCallback cb,
+                                  void* client_data)
+{
   return LoggerManager::GetInstance().StopLogger(handle, log_type, cb, client_data);
 }

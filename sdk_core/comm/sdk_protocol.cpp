@@ -26,30 +26,37 @@
 
 #include <stdio.h>
 #include <string.h>
-namespace livox {
-namespace lidar {
-
+namespace livox
+{
+namespace lidar
+{
 const uint8_t kSdkProtocolSof = 0xAA;
 const uint8_t kSdkVer = 0;
 const uint32_t kSdkPacketCrcSize = 4;          // crc32
 const uint32_t kSdkPacketPreambleCrcSize = 2;  // crc16
 
-SdkProtocol::SdkProtocol() {}
-
-SdkProtocol::~SdkProtocol() {
+SdkProtocol::SdkProtocol()
+{
 }
 
-int32_t SdkProtocol::Pack(uint8_t *o_buf, uint32_t o_buf_size, uint32_t *o_len, const CommPacket &i_packet) {
-  if (kLidarSdk != i_packet.protocol) {
+SdkProtocol::~SdkProtocol()
+{
+}
+
+int32_t SdkProtocol::Pack(uint8_t* o_buf, uint32_t o_buf_size, uint32_t* o_len, const CommPacket& i_packet)
+{
+  if (kLidarSdk != i_packet.protocol)
+  {
     return -1;
   }
 
-  SdkPacket *sdk_packet = (SdkPacket *)o_buf;
+  SdkPacket* sdk_packet = (SdkPacket*)o_buf;
 
   sdk_packet->sof = kSdkProtocolSof;
   sdk_packet->version = kSdkVer;
   sdk_packet->length = i_packet.data_len + GetPacketWrapperLen();
-  if (sdk_packet->length > o_buf_size) {
+  if (sdk_packet->length > o_buf_size)
+  {
     return -1;
   }
 
@@ -60,9 +67,12 @@ int32_t SdkProtocol::Pack(uint8_t *o_buf, uint32_t o_buf_size, uint32_t *o_len, 
 
   sdk_packet->crc16_h = crc_16_.ccitt(o_buf, 18);
 
-  if (i_packet.data_len == 0) {
+  if (i_packet.data_len == 0)
+  {
     sdk_packet->crc32_d = 0;
-  }  else {
+  }
+  else
+  {
     sdk_packet->crc32_d = crc_32_.crc32(i_packet.data, i_packet.data_len);
   }
 
@@ -73,14 +83,16 @@ int32_t SdkProtocol::Pack(uint8_t *o_buf, uint32_t o_buf_size, uint32_t *o_len, 
   return 0;
 }
 
-bool SdkProtocol::ParsePacket(uint8_t *i_buf, uint32_t buf_size, CommPacket *o_packet) {
-  SdkPacket *sdk_packet = (SdkPacket *)i_buf;
+bool SdkProtocol::ParsePacket(uint8_t* i_buf, uint32_t buf_size, CommPacket* o_packet)
+{
+  SdkPacket* sdk_packet = (SdkPacket*)i_buf;
 
-  if (buf_size < GetPacketWrapperLen()) {
+  if (buf_size < GetPacketWrapperLen())
+  {
     return false;
   }
 
-  memset((void *)o_packet, 0, sizeof(CommPacket));
+  memset((void*)o_packet, 0, sizeof(CommPacket));
 
   o_packet->protocol = kLidarSdk;
   o_packet->version = sdk_packet->version;
@@ -93,56 +105,67 @@ bool SdkProtocol::ParsePacket(uint8_t *i_buf, uint32_t buf_size, CommPacket *o_p
   return true;
 }
 
-uint32_t SdkProtocol::GetPreambleLen() {
+uint32_t SdkProtocol::GetPreambleLen()
+{
   return sizeof(SdkPreamble);
 }
 
-uint32_t SdkProtocol::GetPacketWrapperLen() {
+uint32_t SdkProtocol::GetPacketWrapperLen()
+{
   return sizeof(SdkPacket) - 1;
 }
 
-uint32_t SdkProtocol::GetPacketLen(uint8_t *buf) {
-  SdkPreamble *preamble = (SdkPreamble *)buf;
+uint32_t SdkProtocol::GetPacketLen(uint8_t* buf)
+{
+  SdkPreamble* preamble = (SdkPreamble*)buf;
   return preamble->length;
 }
 
-bool SdkProtocol::CheckPreamble(uint8_t *buf, uint32_t buf_size) {
-  if (buf_size < GetPreambleLen()) {
+bool SdkProtocol::CheckPreamble(uint8_t* buf, uint32_t buf_size)
+{
+  if (buf_size < GetPreambleLen())
+  {
     return false;
   }
 
-  SdkPacket *packet = (SdkPacket *)buf;
-  if (packet->sof != kSdkProtocolSof) {
+  SdkPacket* packet = (SdkPacket*)buf;
+  if (packet->sof != kSdkProtocolSof)
+  {
     return false;
   }
 
-  if (packet->version != kSdkVer) {
+  if (packet->version != kSdkVer)
+  {
     return false;
   }
 
-  if (packet->length < GetPreambleLen()) {
+  if (packet->length < GetPreambleLen())
+  {
     return false;
   }
 
   uint16_t crc16_h = crc_16_.ccitt(buf, 18);
-  if (packet->crc16_h != crc16_h) {
+  if (packet->crc16_h != crc16_h)
+  {
     return false;
   }
 
-
   uint32_t crc32_d = 0;
-   if (packet->length - GetPacketWrapperLen() == 0) {
+  if (packet->length - GetPacketWrapperLen() == 0)
+  {
     crc32_d = 0;
-  } else {
+  }
+  else
+  {
     crc32_d = crc_32_.crc32(packet->data, packet->length - GetPacketWrapperLen());
   }
-  
-  if (packet->crc32_d != crc32_d) {
+
+  if (packet->crc32_d != crc32_d)
+  {
     return false;
   }
   return true;
 }
 
-
-} // namespace lidar
+}  // namespace lidar
 }  // namespace livox

@@ -38,13 +38,19 @@
 #include "livox_lidar_def.h"
 #include "device_manager.h"
 
-namespace livox {
-namespace lidar {
-
-class CommandHandler {
- public:
-  CommandHandler(DeviceManager* device_manager) : device_manager_(device_manager) {}
-  ~CommandHandler() {}
+namespace livox
+{
+namespace lidar
+{
+class CommandHandler
+{
+public:
+  CommandHandler(DeviceManager* device_manager) : device_manager_(device_manager)
+  {
+  }
+  ~CommandHandler()
+  {
+  }
 
   virtual bool Init(bool is_view) = 0;
   virtual bool Init(const std::map<uint32_t, LivoxLidarCfg>& custom_lidars_cfg_map) = 0;
@@ -53,12 +59,13 @@ class CommandHandler {
   virtual void UpdateLidarCfg(const ViewLidarIpInfo& view_lidar_info) = 0;
   virtual void UpdateLidarCfg(const uint32_t handle, const uint16_t lidar_cmd_port) = 0;
   virtual livox_status SendCommand(const Command& command) = 0;
-  virtual livox_status SendLoggerCommand(const Command &command) = 0;
- protected:
+  virtual livox_status SendLoggerCommand(const Command& command) = 0;
+
+protected:
   DeviceManager* device_manager_;
 };
 
+}  // namespace lidar
 }  // namespace livox
-} // namespace lidar
 
 #endif  // COMMAND_HANDLER_H_

@@ -29,14 +29,21 @@
 #include "comm/protocol.h"
 #include "FastCRC/FastCRC.h"
 
-namespace livox {
-namespace lidar {
-
-typedef enum { kSdkVerNone, kSdkVer0, kSdkVer1 } SdkVersion;
+namespace livox
+{
+namespace lidar
+{
+typedef enum
+{
+  kSdkVerNone,
+  kSdkVer0,
+  kSdkVer1
+} SdkVersion;
 
 #pragma pack(1)
 
-typedef struct {
+typedef struct
+{
   uint8_t sof;
   uint8_t version;
   uint16_t length;
@@ -49,7 +56,8 @@ typedef struct {
   uint32_t crc32_d;
 } SdkPreamble;
 
-typedef struct {
+typedef struct
+{
   uint8_t sof;
   uint8_t version;
   uint16_t length;
@@ -65,27 +73,29 @@ typedef struct {
 
 #pragma pack()
 
-class SdkProtocol : public Protocol {
- public:
+class SdkProtocol : public Protocol
+{
+public:
   SdkProtocol();
 
   ~SdkProtocol();
 
-  bool ParsePacket(uint8_t *i_buf, uint32_t buf_size, CommPacket *o_packet);
+  bool ParsePacket(uint8_t* i_buf, uint32_t buf_size, CommPacket* o_packet);
 
-  int32_t Pack(uint8_t *o_buf, uint32_t o_buf_size, uint32_t *o_len, const CommPacket &i_packet);
+  int32_t Pack(uint8_t* o_buf, uint32_t o_buf_size, uint32_t* o_len, const CommPacket& i_packet);
 
   uint32_t GetPreambleLen();
 
   uint32_t GetPacketWrapperLen();
 
-  uint32_t GetPacketLen(uint8_t *buf);
+  uint32_t GetPacketLen(uint8_t* buf);
 
-  bool CheckPreamble(uint8_t *buf, uint32_t buf_size);
- private:
+  bool CheckPreamble(uint8_t* buf, uint32_t buf_size);
+
+private:
   FastCRC16 crc_16_;
   FastCRC32 crc_32_;
 };
-} // namespace lidar
+}  // namespace lidar
 }  // namespace livox
 #endif  // LIVOX_SDK_PROTOCOL_H_

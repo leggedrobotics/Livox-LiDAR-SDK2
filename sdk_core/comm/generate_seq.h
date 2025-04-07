@@ -29,17 +29,16 @@
 #include <memory>
 #include <atomic>
 
-
-namespace livox {
-namespace lidar {
-
-
-class GenerateSeq {
- public:
+namespace livox
+{
+namespace lidar
+{
+class GenerateSeq
+{
+public:
   static uint32_t GetSeq();
-
 };
 
-} // namespace lidar
+}  // namespace lidar
 }  // namespace livox
 #endif  // GENERATE_SEQ_H_

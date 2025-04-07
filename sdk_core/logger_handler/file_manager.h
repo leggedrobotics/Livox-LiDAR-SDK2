@@ -29,9 +29,10 @@
 #include <vector>
 #include <map>
 
-namespace livox {
-namespace lidar {
-
+namespace livox
+{
+namespace lidar
+{
 uint64_t GetDirTotalSize(const std::string& dir_name);
 
 bool GetFileNames(const std::string& dir_name, std::multimap<std::string, std::string>& files_name);
@@ -44,7 +45,7 @@ bool MakeDirecotory(std::string dir);
 
 bool IsDirectoryExits(std::string dir);
 
-} // namespace lidar
+}  // namespace lidar
 }  // namespace livox
 
 #endif  // LIVOX_FILE_MANAGER_

@@ -29,16 +29,22 @@
 #include "spdlog/sinks/rotating_file_sink.h"
 
 #ifdef _WIN32
-#define __FILENAME__ (strrchr(__FILE__, '\\') ? (strrchr(__FILE__, '\\') + 1):__FILE__)
+#define __FILENAME__ (strrchr(__FILE__, '\\') ? (strrchr(__FILE__, '\\') + 1) : __FILE__)
 #else
-#define __FILENAME__ (strrchr(__FILE__, '/') ? (strrchr(__FILE__, '/') + 1):__FILE__)
+#define __FILENAME__ (strrchr(__FILE__, '/') ? (strrchr(__FILE__, '/') + 1) : __FILE__)
 #endif
 
 #ifndef suffix
-#define suffix(msg)  std::string(msg).append("  [")\
-        .append(__FILENAME__).append("] [").append(__func__)\
-        .append("] [").append(std::to_string(__LINE__))\
-        .append("]").c_str()
+#define suffix(msg)                                                                                                    \
+  std::string(msg)                                                                                                     \
+      .append("  [")                                                                                                   \
+      .append(__FILENAME__)                                                                                            \
+      .append("] [")                                                                                                   \
+      .append(__func__)                                                                                                \
+      .append("] [")                                                                                                   \
+      .append(std::to_string(__LINE__))                                                                                \
+      .append("]")                                                                                                     \
+      .c_str()
 #endif
 
 #ifndef SPDLOG_TRACE_ON

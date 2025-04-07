@@ -30,21 +30,24 @@
 
 #include "FastCRC/FastCRC.h"
 
-namespace livox {
-namespace lidar {
-
+namespace livox
+{
+namespace lidar
+{
 const uint32_t kMd5SignatureLength = 16;
 const uint32_t kEnlFileVersionV2 = 0x02000000;
 const uint32_t kEnlFileVersionV3 = 0x03000000;
 
-typedef enum {
+typedef enum
+{
   kFirmwareMultiApp = 0,
   kFirmwareApp = 1,
   kFirmwareLoader = 2,
   kFirmwareUnknown = 3,
 } FirmwareType;
 
-typedef enum {
+typedef enum
+{
   kFirmwareDeviceTypeHub = 0,          /**< Livox Hub. */
   kFirmwareDeviceTypeLidarMid40 = 1,   /**< Mid-40. */
   kFirmwareDeviceTypeLidarTele = 2,    /**< Tele. */
@@ -76,8 +79,8 @@ typedef enum {
 //   uint16_t header_checksum;
 // } LivoxEncryptFirmwareHeader;
 
-
-typedef struct {
+typedef struct
+{
   uint32_t file_version;
   uint32_t firmware_version;
   uint32_t firmware_length;
@@ -93,12 +96,14 @@ typedef struct {
   uint16_t header_checksum;
 } LivoxEncryptFirmwareHeader;
 
-typedef struct {
+typedef struct
+{
   uint8_t overall_signature[kMd5SignatureLength];
 } LivoxEncryptFirmwareTail;
 
 /** Lidar feature. */
-typedef enum {
+typedef enum
+{
   kEverythingIsOk = 0,
   kFirmwareOutOfLength = 1,
   kSystemIsNotReady = 2,
@@ -112,22 +117,25 @@ const uint32_t kGetProgressTryCountLimit = 10;
 
 #pragma pack()
 
-class Firmware {
- public:
+class Firmware
+{
+public:
   Firmware();
   ~Firmware();
-  bool Open(const char *firmware_path);
+  bool Open(const char* firmware_path);
   void Close();
 
-  const uint32_t FirmwarePackageVersion() const { return header_.file_version; }
-
+  const uint32_t FirmwarePackageVersion() const
+  {
+    return header_.file_version;
+  }
 
   LivoxEncryptFirmwareHeader header_;
-  uint8_t *data_;
+  uint8_t* data_;
   LivoxEncryptFirmwareTail tail_;
   uint64_t file_size_;
 
- private:
+private:
   uint64_t MiniFileSize();
   bool ReadAndCheckHeader();
   std::ifstream file_;
@@ -135,7 +143,7 @@ class Firmware {
   FastCRC16 crc16_;
 };
 
-}
-}
+}  // namespace lidar
+}  // namespace livox
 
-#endif //LIVOX_UPGRADE_FIRMWARE_H_
+#endif  // LIVOX_UPGRADE_FIRMWARE_H_

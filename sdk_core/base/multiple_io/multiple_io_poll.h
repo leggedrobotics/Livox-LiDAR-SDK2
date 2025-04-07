@@ -29,26 +29,28 @@
 #include "livox_lidar_cfg.h"
 #include <memory>
 
-
 #ifdef HAVE_POLL
 
-namespace livox {
-namespace lidar {
-
-class MultipleIOPoll : public MultipleIOBase {
- public:
+namespace livox
+{
+namespace lidar
+{
+class MultipleIOPoll : public MultipleIOBase
+{
+public:
   bool PollCreate(int size);
   bool PollSetAdd(PollFd poll_fd);
   bool PollSetRemove(PollFd poll_fd);
   void Poll(int timeout);
   void PollDestroy();
- private:
+
+private:
   std::unique_ptr<struct pollfd[]> pollset_;
   int pollset_num_ = 0;
   int max_poll_size_ = 0;
 };
 
-} // namespace lidar
+}  // namespace lidar
 }  // namespace livox
 
 #endif  // HAVE_POLL

@@ -42,10 +42,12 @@
 #include "device_manager.h"
 #include "command_handler.h"
 
-namespace livox {
-namespace lidar {
-
-typedef struct {
+namespace livox
+{
+namespace lidar
+{
+typedef struct
+{
   std::string sn;
   std::string lidar_ip;
   uint8_t dev_type;
@@ -57,12 +59,14 @@ typedef struct {
 
 class HapCommandHandle;
 
-class GeneralCommandHandler : public noncopyable {
- private:
+class GeneralCommandHandler : public noncopyable
+{
+private:
   GeneralCommandHandler();
   GeneralCommandHandler(const GeneralCommandHandler& other) = delete;
   GeneralCommandHandler& operator=(const GeneralCommandHandler& other) = delete;
- public:
+
+public:
   ~GeneralCommandHandler();
   void Destory();
   static GeneralCommandHandler& GetInstance();
@@ -70,42 +74,46 @@ class GeneralCommandHandler : public noncopyable {
   bool Init(const std::string& host_ip, const bool is_view, DeviceManager* device_manager);
 
   bool Init(std::shared_ptr<std::vector<LivoxLidarCfg>>& custom_lidars_cfg_ptr, DeviceManager* device_manager);
-  
+
   // void SetDeviceManager(DeviceManager* device_manager);
 
-  void Handler(uint32_t handle, uint16_t lidar_port, uint8_t *buf, uint32_t buf_size);
+  void Handler(uint32_t handle, uint16_t lidar_port, uint8_t* buf, uint32_t buf_size);
 
-  void Handler(const uint8_t dev_type, const uint32_t handle, const uint16_t lidar_port,
-      uint8_t *buf, uint32_t buf_size);
-  
+  void Handler(const uint8_t dev_type, const uint32_t handle, const uint16_t lidar_port, uint8_t* buf,
+               uint32_t buf_size);
+
   void CreateCommandHandler(const uint8_t dev_type);
 
-  livox_status SendCommand(uint32_t handle, uint16_t command_id, uint8_t *data,
-      uint16_t length, const std::shared_ptr<CommandCallback> &cb);
-  
-  livox_status SendLoggerCommand(uint32_t handle, uint16_t command_id, uint8_t *data,
-                                 uint16_t length, const std::shared_ptr<CommandCallback> &cb);
+  livox_status SendCommand(uint32_t handle, uint16_t command_id, uint8_t* data, uint16_t length,
+                           const std::shared_ptr<CommandCallback>& cb);
+
+  livox_status SendLoggerCommand(uint32_t handle, uint16_t command_id, uint8_t* data, uint16_t length,
+                                 const std::shared_ptr<CommandCallback>& cb);
 
   void CommandsHandle(TimePoint now);
   void AddCommand(const Command& command);
   void AddDetectedLidar(const std::shared_ptr<std::vector<LivoxLidarCfg>>& custom_lidars_cfg_ptr);
 
-  void SetLivoxLidarInfoChangeCallback(LivoxLidarInfoChangeCallback cb, void* client_data) {
+  void SetLivoxLidarInfoChangeCallback(LivoxLidarInfoChangeCallback cb, void* client_data)
+  {
     livox_lidar_info_change_cb_ = cb;
     livox_lidar_info_change_client_data_ = client_data;
   }
 
-  void SetLivoxLidarInfoCallback(LivoxLidarInfoCallback cb, void* client_data) {
+  void SetLivoxLidarInfoCallback(LivoxLidarInfoCallback cb, void* client_data)
+  {
     livox_lidar_info_cb_ = cb;
     livox_lidar_info_client_data_ = client_data;
   }
 
-  void LivoxLidarAddCmdObserver(LivoxLidarCmdObserverCallBack cb, void* client_data) {
+  void LivoxLidarAddCmdObserver(LivoxLidarCmdObserverCallBack cb, void* client_data)
+  {
     cmd_observer_cb_ = cb;
     cmd_observer_client_data_ = client_data;
   }
 
-  void LivoxLidarRemoveCmdObserver() {
+  void LivoxLidarRemoveCmdObserver()
+  {
     cmd_observer_cb_ = nullptr;
     cmd_observer_client_data_ = nullptr;
   }
@@ -117,8 +125,10 @@ class GeneralCommandHandler : public noncopyable {
   bool GetQueryLidarInternalInfoKeys(const uint32_t handle, std::set<ParamKeyName>& key_sets);
   const LivoxLidarCfg& GetLidarCfg(const uint32_t handle);
   livox_status LivoxLidarRequestReset(uint32_t handle, LivoxLidarResetCallback cb, void* client_data);
-  static void QueryFwTypeCallback(livox_status status, uint32_t handle, LivoxLidarDiagInternalInfoResponse* response, void* client_data);
- private:
+  static void QueryFwTypeCallback(livox_status status, uint32_t handle, LivoxLidarDiagInternalInfoResponse* response,
+                                  void* client_data);
+
+private:
   bool VerifyNetSegment(const DetectionData* detection_data);
   std::shared_ptr<CommandHandler> GetLidarCommandHandler(const uint8_t dev_type);
   std::shared_ptr<CommandHandler> GetLidarCommandHandler(const uint32_t handle);
@@ -126,7 +136,8 @@ class GeneralCommandHandler : public noncopyable {
   void GetFirmwareType(const uint32_t handle, DeviceInfo& device_info);
   livox_status QueryFwType(const uint32_t handle);
   void UpdateFwType(const uint32_t handle, const uint8_t fw_type);
- private:
+
+private:
   DeviceManager* device_manager_;
   std::unique_ptr<CommPort> comm_port_;
 
@@ -142,7 +153,7 @@ class GeneralCommandHandler : public noncopyable {
   std::map<uint8_t, std::shared_ptr<CommandHandler>> lidars_command_handler_;
 
   std::mutex commands_mutex_;
-  std::map<uint32_t, std::pair<Command, TimePoint> > commands_;
+  std::map<uint32_t, std::pair<Command, TimePoint>> commands_;
 
   LivoxLidarInfoChangeCallback livox_lidar_info_change_cb_;
   void* livox_lidar_info_change_client_data_;
@@ -150,14 +161,14 @@ class GeneralCommandHandler : public noncopyable {
   LivoxLidarInfoCallback livox_lidar_info_cb_;
   void* livox_lidar_info_client_data_;
 
-  LivoxLidarCmdObserverCallBack cmd_observer_cb_{nullptr};
-  void* cmd_observer_client_data_{nullptr};
+  LivoxLidarCmdObserverCallBack cmd_observer_cb_{ nullptr };
+  void* cmd_observer_client_data_{ nullptr };
 
   std::string detection_host_ip_;
   bool is_view_;
 };
 
+}  // namespace lidar
 }  // namespace livox
-} // namespace lidar
 
 #endif  // GENERAL_COMMAND_HANDLER_H_

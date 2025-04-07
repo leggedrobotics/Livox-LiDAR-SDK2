@@ -46,31 +46,35 @@
 std::condition_variable cv;
 std::mutex mtx;
 
-uint8_t lidars_num = 1; // lidar num
+uint8_t lidars_num = 1;  // lidar num
 
 std::vector<uint32_t> handles;
 
-void WorkModeCallback(livox_status status, uint32_t handle,LivoxLidarAsyncControlResponse *response, void *client_data) {
-  if (response == nullptr) {
+void WorkModeCallback(livox_status status, uint32_t handle, LivoxLidarAsyncControlResponse* response, void* client_data)
+{
+  if (response == nullptr)
+  {
     return;
   }
-  printf("Work_Mode_Call_Back, status:%u, handle:%u, ret_code:%u, error_key:%u",
-      status, handle, response->ret_code, response->error_key);
+  printf("Work_Mode_Call_Back, status:%u, handle:%u, ret_code:%u, error_key:%u", status, handle, response->ret_code,
+         response->error_key);
   cv.notify_one();
 }
 
-
-void QueryInternalInfoCallback(livox_status status, uint32_t handle, 
-    LivoxLidarDiagInternalInfoResponse* response, void* client_data) {
-  if (response == nullptr) {
+void QueryInternalInfoCallback(livox_status status, uint32_t handle, LivoxLidarDiagInternalInfoResponse* response,
+                               void* client_data)
+{
+  if (response == nullptr)
+  {
     return;
   }
-  printf("QueryInternalInfoCallback, status:%u, handle:%u, ret_code:%u.\n",
-        status, handle, response->ret_code);
+  printf("QueryInternalInfoCallback, status:%u, handle:%u, ret_code:%u.\n", status, handle, response->ret_code);
 }
 
-void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, void* client_data) {
-  if (info == nullptr) {
+void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, void* client_data)
+{
+  if (info == nullptr)
+  {
     return;
   }
   printf("LidarInfoChangeCallback Lidar handle: %u SN: %s\n", handle, info->sn);
@@ -78,16 +82,19 @@ void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, 
   handles.push_back(handle);
 }
 
-
-void LivoxLidarUpgradeProgressCallback(uint32_t handle, LivoxLidarUpgradeState state, void* client_data) {
+void LivoxLidarUpgradeProgressCallback(uint32_t handle, LivoxLidarUpgradeState state, void* client_data)
+{
   printf("Upgrade Progress Callback, handle: %u, state: %d progress: %d\n", handle, state.state, state.progress);
-  if (state.progress == 100) {
+  if (state.progress == 100)
+  {
     cv.notify_one();
   }
 }
 
-int main(int argc, const char *argv[]) {
-  if (argc != 3) {
+int main(int argc, const char* argv[])
+{
+  if (argc != 3)
+  {
     printf("Params Invalid, must input config path and firmware path.\n");
     return -1;
   }
@@ -97,21 +104,24 @@ int main(int argc, const char *argv[]) {
   printf("path:%s.\n", path.c_str());
   printf("firmware_path:%s.\n", firmware_path.c_str());
 
-  if (!LivoxLidarSdkInit(path.c_str())) {
+  if (!LivoxLidarSdkInit(path.c_str()))
+  {
     printf("Livox Init Failed\n");
     LivoxLidarSdkUninit();
     return -1;
   }
   SetLivoxLidarInfoChangeCallback(LidarInfoChangeCallback, nullptr);
 
-    //Lidar Upgrade
-  if (!SetLivoxLidarUpgradeFirmwarePath(firmware_path.c_str())) {
+  // Lidar Upgrade
+  if (!SetLivoxLidarUpgradeFirmwarePath(firmware_path.c_str()))
+  {
     LivoxLidarSdkUninit();
     return -1;
   }
   SetLivoxLidarUpgradeProgressCallback(LivoxLidarUpgradeProgressCallback, nullptr);
 
-  while(handles.size() < lidars_num) {
+  while (handles.size() < lidars_num)
+  {
     {
       std::unique_lock<std::mutex> lock(mtx);
       cv.wait(lock);
@@ -126,6 +136,6 @@ int main(int argc, const char *argv[]) {
   sleep(3000000);
 #endif
   LivoxLidarSdkUninit();
-	printf("Livox Lidars Update Demo End!\n");
+  printf("Livox Lidars Update Demo End!\n");
   return 0;
 }

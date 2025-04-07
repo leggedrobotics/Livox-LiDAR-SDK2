@@ -32,12 +32,15 @@
 #include "multiple_io_poll.h"
 #include <memory>
 
-namespace livox {
-namespace lidar {
-
-class MultipleIOFactory {
- public:
-  static std::unique_ptr<MultipleIOBase> CreateMultipleIO() {
+namespace livox
+{
+namespace lidar
+{
+class MultipleIOFactory
+{
+public:
+  static std::unique_ptr<MultipleIOBase> CreateMultipleIO()
+  {
 #if defined(HAVE_EPOLL)
     return std::unique_ptr<MultipleIOBase>(new MultipleIOEpoll());
 #elif defined(HAVE_KQUEUE)
@@ -52,7 +55,7 @@ class MultipleIOFactory {
   }
 };
 
-} // namespace lidar
+}  // namespace lidar
 }  // namespace livox
 
 #endif  // MULTIPLE_IO_FACTORY_H_

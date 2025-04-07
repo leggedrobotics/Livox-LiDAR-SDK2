@@ -27,35 +27,43 @@
 #include <iostream>
 #include <memory>
 
-namespace livox {
-namespace lidar {
+namespace livox
+{
+namespace lidar
+{
+ThreadBase::ThreadBase() : quit_(false)
+{
+}
 
-
-ThreadBase::ThreadBase() : quit_(false) {}
-
-bool ThreadBase::Start() {
+bool ThreadBase::Start()
+{
   quit_ = false;
   thread_ = std::make_shared<std::thread>(&ThreadBase::ThreadFunc, this);
   return true;
 }
 
-ThreadBase::~ThreadBase() {
-  if (thread_) {
+ThreadBase::~ThreadBase()
+{
+  if (thread_)
+  {
     Join();
   }
 }
 
-void ThreadBase::Join() {
+void ThreadBase::Join()
+{
   quit_ = true;
-  if (thread_ && thread_->joinable()) {
+  if (thread_ && thread_->joinable())
+  {
     thread_->join();
     thread_ = nullptr;
-  } else {
-    std::cout << "failed to join thread, joinable: " 
-              << thread_->joinable() << std::endl;
+  }
+  else
+  {
+    std::cout << "failed to join thread, joinable: " << thread_->joinable() << std::endl;
     thread_ = nullptr;
   }
 }
 
-} // namespace lidar
+}  // namespace lidar
 }  // namespace livox

@@ -37,18 +37,20 @@
 
 using UtcTimerCallback = std::function<void(const char* rmc, uint16_t rmc_length)>;
 
-# define READ_BUF (256)
-const char * const kGPRMC{"$GPRMC"};
-const char * const kGNRMC{"$GNRMC"};
+#define READ_BUF (256)
+const char* const kGPRMC{ "$GPRMC" };
+const char* const kGNRMC{ "$GNRMC" };
 
-enum Parity {
-  P_8N1,    /* No parity (8N1)	*/     
-  P_7E1,    /* Even parity (7E1)*/
-  P_7O1,    /* Odd parity (7O1)	*/
-  P_7S1     /* Space parity is setup the same as no parity (7S1)	*/
+enum Parity
+{
+  P_8N1, /* No parity (8N1)	*/
+  P_7E1, /* Even parity (7E1)*/
+  P_7O1, /* Odd parity (7O1)	*/
+  P_7S1  /* Space parity is setup the same as no parity (7S1)	*/
 };
 
-enum BaudRate {
+enum BaudRate
+{
   BR2400,
   BR4800,
   BR9600,
@@ -70,18 +72,18 @@ enum BaudRate {
   BR4000000,
 };
 
-
-class Synchro {
-
+class Synchro
+{
 public:
   Synchro();
   ~Synchro();
 
-  static Synchro& GetInstance() {
+  static Synchro& GetInstance()
+  {
     static Synchro synchro;
     return synchro;
   }
-  
+
   bool Start();
   void Stop();
   void SetBaudRate(BaudRate baudrate);
@@ -94,13 +96,13 @@ private:
   void Close();
   bool Open();
   void IOLoop();
-  size_t Read(uint8_t *buffer, size_t size);
+  size_t Read(uint8_t* buffer, size_t size);
   void Decode(uint8_t* buff, size_t size);
   bool ParseGps(uint8_t in_byte);
   void Clear();
 
 #ifdef WIN32
-  HANDLE  hfile_;
+  HANDLE hfile_;
 #else
   int fd_;
 #endif

@@ -48,77 +48,94 @@
 std::condition_variable quit_condition;
 std::mutex mtx;
 
-void PointCloudCallback(uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket* data, void* client_data) {
-  if (data == nullptr) {
+void PointCloudCallback(uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket* data, void* client_data)
+{
+  if (data == nullptr)
+  {
     return;
   }
-  printf("point cloud handle: %d, data_num: %d, data_type: %d, length: %d, frame_counter: %d\n",
-      handle, data->dot_num, data->data_type, data->length, data->frame_cnt);
+  printf("point cloud handle: %d, data_num: %d, data_type: %d, length: %d, frame_counter: %d\n", handle, data->dot_num,
+         data->data_type, data->length, data->frame_cnt);
 }
 
-void ImuDataCallback(uint32_t handle, const uint8_t dev_type,  LivoxLidarEthernetPacket* data, void* client_data) {
-  if (data == nullptr) {
+void ImuDataCallback(uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket* data, void* client_data)
+{
+  if (data == nullptr)
+  {
     return;
   }
-  printf("Imu data callback handle:%u, data_num:%u, data_type:%u, length:%u, frame_counter:%u.\n",
-      handle, data->dot_num, data->data_type, data->length, data->frame_cnt);
+  printf("Imu data callback handle:%u, data_num:%u, data_type:%u, length:%u, frame_counter:%u.\n", handle,
+         data->dot_num, data->data_type, data->length, data->frame_cnt);
 }
-     
-void WorkModeCallback(livox_status status, uint32_t handle,LivoxLidarAsyncControlResponse *response, void *client_data) {
-  if (response == nullptr) {
+
+void WorkModeCallback(livox_status status, uint32_t handle, LivoxLidarAsyncControlResponse* response, void* client_data)
+{
+  if (response == nullptr)
+  {
     return;
   }
   printf("--------------------------------------------------------------------------------\n");
-  printf("WorkModeCallack, status:%u, handle:%u, ret_code:%u, error_key:%u",
-      status, handle, response->ret_code, response->error_key);
-      printf("--------------------------------------------------------------------------------\n");
+  printf("WorkModeCallack, status:%u, handle:%u, ret_code:%u, error_key:%u", status, handle, response->ret_code,
+         response->error_key);
+  printf("--------------------------------------------------------------------------------\n");
 }
 
-void ScanSensitivityCallback(livox_status status, uint32_t handle,LivoxLidarAsyncControlResponse *response, void *client_data) {
-  if (response == nullptr) {
+void ScanSensitivityCallback(livox_status status, uint32_t handle, LivoxLidarAsyncControlResponse* response,
+                             void* client_data)
+{
+  if (response == nullptr)
+  {
     return;
   }
   printf("--------------------------------------------------------------------------------\n");
-  printf("ScanSensitivityCallback, status:%u, handle:%u, ret_code:%u, error_key:%u",
-      status, handle, response->ret_code, response->error_key);
-      printf("--------------------------------------------------------------------------------\n");
+  printf("ScanSensitivityCallback, status:%u, handle:%u, ret_code:%u, error_key:%u", status, handle, response->ret_code,
+         response->error_key);
+  printf("--------------------------------------------------------------------------------\n");
 }
 
-void LoggerStartCallback(livox_status status, uint32_t handle, LivoxLidarLoggerResponse* response, void* client_data) {
-  if (status != kLivoxLidarStatusSuccess) {
+void LoggerStartCallback(livox_status status, uint32_t handle, LivoxLidarLoggerResponse* response, void* client_data)
+{
+  if (status != kLivoxLidarStatusSuccess)
+  {
     printf("--------------------------------------------------------------------------------\n");
     printf("Start logger failed, the status :%d\n", status);
-    LivoxLidarStartLogger(handle,  kLivoxLidarRealTimeLog, LoggerStartCallback, nullptr);
+    LivoxLidarStartLogger(handle, kLivoxLidarRealTimeLog, LoggerStartCallback, nullptr);
     printf("--------------------------------------------------------------------------------\n");
     return;
   }
 
-  if (response == nullptr) {
+  if (response == nullptr)
+  {
     printf("Start logger failed, the response is nullptr.\n");
-    LivoxLidarStartLogger(handle,  kLivoxLidarRealTimeLog, LoggerStartCallback, nullptr);
+    LivoxLidarStartLogger(handle, kLivoxLidarRealTimeLog, LoggerStartCallback, nullptr);
     return;
   }
 
-  if (response->ret_code != 0) {
+  if (response->ret_code != 0)
+  {
     printf("Start logger failed, the response ret_Code:%d.\n", response->ret_code);
-    LivoxLidarStartLogger(handle,  kLivoxLidarRealTimeLog, LoggerStartCallback, nullptr);
+    LivoxLidarStartLogger(handle, kLivoxLidarRealTimeLog, LoggerStartCallback, nullptr);
     return;
   }
 
   printf("The lidar[%u] start logger succ.\n", handle);
 }
 
-void DebugPointCloudCallback(livox_status status, uint32_t handle, LivoxLidarLoggerResponse* response, void* client_data) {
+void DebugPointCloudCallback(livox_status status, uint32_t handle, LivoxLidarLoggerResponse* response,
+                             void* client_data)
+{
   printf("--------------------------------------------------------------------------------\n");
   printf("livox_status = %d, Lidar: %u response is %d\n", status, handle, response->ret_code);
   printf("--------------------------------------------------------------------------------\n");
 }
 
-void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, void* client_data) {
-  if (info == nullptr) {
+void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, void* client_data)
+{
+  if (info == nullptr)
+  {
     printf("lidar info change callback failed, the info is nullptr.\n");
     return;
-  } 
+  }
   printf("IN the first function.\n");
   LivoxLidarStartLogger(handle, kLivoxLidarRealTimeLog, LoggerStartCallback, nullptr);
 
@@ -126,37 +143,43 @@ void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, 
   sleep(2);
   SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeCallback, nullptr);
 
-  //SetLivoxLidarDebugPointCloud(handle, true, DebugPointCloudCallback, nullptr);
+  // SetLivoxLidarDebugPointCloud(handle, true, DebugPointCloudCallback, nullptr);
   sleep(2);
   SetLivoxLidarDetectMode(handle, kLivoxLidarDetectSensitive, ScanSensitivityCallback, nullptr);
   sleep(2);
-  //SetLivoxLidarWorkMode(handle, kLivoxLidarSleep, WorkModeCallback, nullptr);
+  // SetLivoxLidarWorkMode(handle, kLivoxLidarSleep, WorkModeCallback, nullptr);
   // SetLivoxLidarDebugPointCloud(handle, false, DebugPointCloudCallback, nullptr);
 }
 
-void LidarInfoChangeCallback2(const uint32_t handle, const LivoxLidarInfo* info, void* client_data) {
-  if (info == nullptr) {
+void LidarInfoChangeCallback2(const uint32_t handle, const LivoxLidarInfo* info, void* client_data)
+{
+  if (info == nullptr)
+  {
     printf("lidar info change callback failed, the info is nullptr.\n");
     return;
-  } 
+  }
 
   printf("LidarInfoChangeCallback2 Lidar handle: %u SN: %s\n", handle, info->sn);
   SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeCallback, nullptr);
   // SetLivoxLidarDebugPointCloud(handle, false, DebugPointCloudCallback, nullptr);
 }
 
-void Stop(int signal) {
+void Stop(int signal)
+{
   quit_condition.notify_all();
 }
 
-int main(int argc, const char *argv[]) {
-  if (argc != 2) {
+int main(int argc, const char* argv[])
+{
+  if (argc != 2)
+  {
     printf("Params Invalid, must input config path.\n");
     return -1;
   }
   const std::string path = argv[1];
 
-  if (!LivoxLidarSdkInit(path.c_str())) {
+  if (!LivoxLidarSdkInit(path.c_str()))
+  {
     printf("Livox Init Failed\n");
     LivoxLidarSdkUninit();
     return -1;
@@ -182,9 +205,7 @@ int main(int argc, const char *argv[]) {
   quit_condition.wait(lock);
   printf("Deivice Logger exit.\n");
 
-
   LivoxLidarSdkUninit();
   printf("Livox Quick Start Demo End!\n");
   return 0;
 }
-

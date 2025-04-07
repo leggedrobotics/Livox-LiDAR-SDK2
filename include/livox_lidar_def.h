@@ -31,31 +31,33 @@
 
 #pragma pack(1)
 
-#define LIVOX_LIDAR_SDK_MAJOR_VERSION       1
-#define LIVOX_LIDAR_SDK_MINOR_VERSION       2
-#define LIVOX_LIDAR_SDK_PATCH_VERSION       5
+#define LIVOX_LIDAR_SDK_MAJOR_VERSION 1
+#define LIVOX_LIDAR_SDK_MINOR_VERSION 2
+#define LIVOX_LIDAR_SDK_PATCH_VERSION 5
 
 #define kBroadcastCodeSize 16
 
 /** Fuction return value defination, refer to \ref LivoxStatus. */
 typedef int32_t livox_status;
 
-
 /** The numeric version information struct.  */
-typedef struct {
-  int major;      /**< major number */
-  int minor;      /**< minor number */
-  int patch;      /**< patch number */
+typedef struct
+{
+  int major; /**< major number */
+  int minor; /**< minor number */
+  int patch; /**< patch number */
 } LivoxLidarSdkVer;
 
-typedef struct {
+typedef struct
+{
   uint8_t dev_type;
   char sn[16];
   char lidar_ip[16];
 } LivoxLidarInfo;
 
 /** Device type. */
-typedef enum {
+typedef enum
+{
   kLivoxLidarTypeHub = 0,
   kLivoxLidarTypeMid40 = 1,
   kLivoxLidarTypeTele = 2,
@@ -68,65 +70,67 @@ typedef enum {
   kLivoxLidarTypePA = 16,
 } LivoxLidarDeviceType;
 
-typedef enum {
-  kKeyPclDataType             = 0x0000,
-  kKeyPatternMode             = 0x0001,
-  kKeyDualEmitEn              = 0x0002,
-  kKeyPointSendEn             = 0x0003,
-  kKeyLidarIpCfg              = 0x0004,
-  kKeyStateInfoHostIpCfg      = 0x0005,
+typedef enum
+{
+  kKeyPclDataType = 0x0000,
+  kKeyPatternMode = 0x0001,
+  kKeyDualEmitEn = 0x0002,
+  kKeyPointSendEn = 0x0003,
+  kKeyLidarIpCfg = 0x0004,
+  kKeyStateInfoHostIpCfg = 0x0005,
   kKeyLidarPointDataHostIpCfg = 0x0006,
-  kKeyLidarImuHostIpCfg       = 0x0007,
-  kKeyCtlHostIpCfg            = 0x0008,
-  kKeyLogHostIpCfg            = 0x0009,
-  
-  kKeyVehicleSpeed            = 0x0010,
-  kKeyEnvironmentTemp         = 0x0011,
-  kKeyInstallAttitude         = 0x0012,
-  kKeyBlindSpotSet            = 0x0013,
-  kKeyFrameRate               = 0x0014,
-  kKeyFovCfg0                 = 0x0015,
-  kKeyFovCfg1                 = 0x0016,
-  kKeyFovCfgEn                = 0x0017,
-  kKeyDetectMode              = 0x0018,
-  kKeyFuncIoCfg               = 0x0019,
-  kKeyWorkModeAfterBoot       = 0x0020,
-  kKeyWorkMode                = 0x001A,
-  kKeyGlassHeat               = 0x001B,
-  kKeyImuDataEn               = 0x001C,
-  kKeyFusaEn                  = 0x001D,
-  kKeyForceHeatEn             = 0x001E,
+  kKeyLidarImuHostIpCfg = 0x0007,
+  kKeyCtlHostIpCfg = 0x0008,
+  kKeyLogHostIpCfg = 0x0009,
 
-  kKeyLogParamSet             = 0x7FFF,
+  kKeyVehicleSpeed = 0x0010,
+  kKeyEnvironmentTemp = 0x0011,
+  kKeyInstallAttitude = 0x0012,
+  kKeyBlindSpotSet = 0x0013,
+  kKeyFrameRate = 0x0014,
+  kKeyFovCfg0 = 0x0015,
+  kKeyFovCfg1 = 0x0016,
+  kKeyFovCfgEn = 0x0017,
+  kKeyDetectMode = 0x0018,
+  kKeyFuncIoCfg = 0x0019,
+  kKeyWorkModeAfterBoot = 0x0020,
+  kKeyWorkMode = 0x001A,
+  kKeyGlassHeat = 0x001B,
+  kKeyImuDataEn = 0x001C,
+  kKeyFusaEn = 0x001D,
+  kKeyForceHeatEn = 0x001E,
 
-  kKeySn                      = 0x8000,
-  kKeyProductInfo             = 0x8001,
-  kKeyVersionApp              = 0x8002,
-  kKeyVersionLoader           = 0x8003,
-  kKeyVersionHardware         = 0x8004,
-  kKeyMac                     = 0x8005,
-  kKeyCurWorkState            = 0x8006,
-  kKeyCoreTemp                = 0x8007,
-  kKeyPowerUpCnt              = 0x8008,
-  kKeyLocalTimeNow            = 0x8009,
-  kKeyLastSyncTime            = 0x800A,
-  kKeyTimeOffset              = 0x800B,
-  kKeyTimeSyncType            = 0x800C,  
-  kKeyStatusCode              = 0x800D,
-  kKeyLidarDiagStatus         = 0x800E,
-  kKeyLidarFlashStatus        = 0x800F,
-  kKeyFwType                  = 0x8010,
-  kKeyHmsCode                 = 0x8011,
-  kKeyCurGlassHeatState       = 0x8012,
-  
-  kKeyRoiMode                 = 0xFFFE,
-  kKeyLidarDiagInfoQuery      = 0xFFFF
+  kKeyLogParamSet = 0x7FFF,
+
+  kKeySn = 0x8000,
+  kKeyProductInfo = 0x8001,
+  kKeyVersionApp = 0x8002,
+  kKeyVersionLoader = 0x8003,
+  kKeyVersionHardware = 0x8004,
+  kKeyMac = 0x8005,
+  kKeyCurWorkState = 0x8006,
+  kKeyCoreTemp = 0x8007,
+  kKeyPowerUpCnt = 0x8008,
+  kKeyLocalTimeNow = 0x8009,
+  kKeyLastSyncTime = 0x800A,
+  kKeyTimeOffset = 0x800B,
+  kKeyTimeSyncType = 0x800C,
+  kKeyStatusCode = 0x800D,
+  kKeyLidarDiagStatus = 0x800E,
+  kKeyLidarFlashStatus = 0x800F,
+  kKeyFwType = 0x8010,
+  kKeyHmsCode = 0x8011,
+  kKeyCurGlassHeatState = 0x8012,
+
+  kKeyRoiMode = 0xFFFE,
+  kKeyLidarDiagInfoQuery = 0xFFFF
 } ParamKeyName;
 
-typedef struct {
+typedef struct
+{
   uint8_t version;
   uint16_t length;
-  uint16_t time_interval;      /**< unit: 0.1 us */
+  uint16_t time_interval; /**< unit: 0.1 us */
   uint16_t dot_num;
   uint16_t udp_cnt;
   uint8_t frame_cnt;
@@ -135,24 +139,26 @@ typedef struct {
   uint8_t rsvd[12];
   uint32_t crc32;
   uint8_t timestamp[8];
-  uint8_t data[1];             /**< Point cloud data. */
+  uint8_t data[1]; /**< Point cloud data. */
 } LivoxLidarEthernetPacket;
 
-typedef struct {
-  uint8_t  sof;
-  uint8_t  version;
+typedef struct
+{
+  uint8_t sof;
+  uint8_t version;
   uint16_t length;
   uint32_t seq_num;
   uint16_t cmd_id;
-  uint8_t  cmd_type;
-  uint8_t  sender_type;
-  char     rsvd[6];
+  uint8_t cmd_type;
+  uint8_t sender_type;
+  char rsvd[6];
   uint16_t crc16_h;
   uint32_t crc32_d;
-  uint8_t  data[1];
+  uint8_t data[1];
 } LivoxLidarCmdPacket;
 
-typedef struct {
+typedef struct
+{
   float gyro_x;
   float gyro_y;
   float gyro_z;
@@ -161,7 +167,8 @@ typedef struct {
   float acc_z;
 } LivoxLidarImuRawPoint;
 
-typedef struct {
+typedef struct
+{
   int32_t x;            /**< X axis, Unit:mm */
   int32_t y;            /**< Y axis, Unit:mm */
   int32_t z;            /**< Z axis, Unit:mm */
@@ -169,7 +176,8 @@ typedef struct {
   uint8_t tag;          /**< Tag */
 } LivoxLidarCartesianHighRawPoint;
 
-typedef struct {
+typedef struct
+{
   int16_t x;            /**< X axis, Unit:cm */
   int16_t y;            /**< Y axis, Unit:cm */
   int16_t z;            /**< Z axis, Unit:cm */
@@ -177,7 +185,8 @@ typedef struct {
   uint8_t tag;          /**< Tag */
 } LivoxLidarCartesianLowRawPoint;
 
-typedef struct {
+typedef struct
+{
   uint32_t depth;
   uint16_t theta;
   uint16_t phi;
@@ -185,67 +194,77 @@ typedef struct {
   uint8_t tag;
 } LivoxLidarSpherPoint;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarImuData = 0,
   kLivoxLidarCartesianCoordinateHighData = 0x01,
   kLivoxLidarCartesianCoordinateLowData = 0x02,
   kLivoxLidarSphericalCoordinateData = 0x03
 } LivoxLidarPointDataType;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarRealTimeLog = 0,
   kLivoxLidarExceptionLog = 0x01
 } LivoxLidarLogType;
 
-typedef enum {
-  kLivoxLidarStatusSendFailed = -9,           /**< Command send failed. */
-  kLivoxLidarStatusHandlerImplNotExist = -8,  /**< Handler implementation not exist. */
-  kLivoxLidarStatusInvalidHandle = -7,        /**< Device handle invalid. */
-  kLivoxLidarStatusChannelNotExist = -6,      /**< Command channel not exist. */
-  kLivoxLidarStatusNotEnoughMemory = -5,      /**< No enough memory. */
-  kLivoxLidarStatusTimeout = -4,              /**< Operation timeouts. */
-  kLivoxLidarStatusNotSupported = -3,         /**< Operation is not supported on this device. */
-  kLivoxLidarStatusNotConnected = -2,         /**< Requested device is not connected. */
-  kLivoxLidarStatusFailure = -1,              /**< Failure. */
-  kLivoxLidarStatusSuccess = 0                /**< Success. */
+typedef enum
+{
+  kLivoxLidarStatusSendFailed = -9,          /**< Command send failed. */
+  kLivoxLidarStatusHandlerImplNotExist = -8, /**< Handler implementation not exist. */
+  kLivoxLidarStatusInvalidHandle = -7,       /**< Device handle invalid. */
+  kLivoxLidarStatusChannelNotExist = -6,     /**< Command channel not exist. */
+  kLivoxLidarStatusNotEnoughMemory = -5,     /**< No enough memory. */
+  kLivoxLidarStatusTimeout = -4,             /**< Operation timeouts. */
+  kLivoxLidarStatusNotSupported = -3,        /**< Operation is not supported on this device. */
+  kLivoxLidarStatusNotConnected = -2,        /**< Requested device is not connected. */
+  kLivoxLidarStatusFailure = -1,             /**< Failure. */
+  kLivoxLidarStatusSuccess = 0               /**< Success. */
 } LivoxLidarStatus;
 
-typedef struct {
-  uint16_t key;                /*< Key, refer to \ref DeviceParamKeyName. */
-  uint16_t length;             /*< Length of value. */
-  uint8_t value[1];            /*< Value. */
+typedef struct
+{
+  uint16_t key;     /*< Key, refer to \ref DeviceParamKeyName. */
+  uint16_t length;  /*< Length of value. */
+  uint8_t value[1]; /*< Value. */
 } LivoxLidarKeyValueParam;
 
-typedef struct {
+typedef struct
+{
   uint8_t ret_code;
   uint16_t error_key;
 } LivoxLidarAsyncControlResponse;
 
-typedef struct {
+typedef struct
+{
   uint8_t ret_code;
   const char* lidar_info;
 } LivoxLidarInfoResponse;
 
-typedef struct {
+typedef struct
+{
   uint8_t ret_code;
   uint16_t param_num;
   uint8_t data[1];
 } LivoxLidarDiagInternalInfoResponse;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarScanPatternNoneRepetive = 0x00,
   kLivoxLidarScanPatternRepetive = 0x01,
   kLivoxLidarScanPatternRepetiveLowFrameRate = 0x02
 } LivoxLidarScanPattern;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarFrameRate10Hz = 0x00,
   kLivoxLidarFrameRate15Hz = 0x01,
   kLivoxLidarFrameRate20Hz = 0x02,
   kLivoxLidarFrameRate25Hz = 0x03,
 } LivoxLidarPointFrameRate;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarNormal = 0x01,
   kLivoxLidarStandBy = 0x02,
   kLivoxLidarSleep = 0x03,
@@ -256,22 +275,25 @@ typedef enum {
   kLivoxLidarUpgrade = 0x08
 } LivoxLidarWorkMode;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarWorkModeAfterBootDefault = 0x00,
   kLivoxLidarWorkModeAfterBootNormal = 0x01,
   kLivoxLidarWorkModeAfterBootWakeUp = 0x02
 } LivoxLidarWorkModeAfterBoot;
 
-typedef struct {
+typedef struct
+{
   float roll_deg;
   float pitch_deg;
   float yaw_deg;
-  int32_t x; //mm
-  int32_t y; //mm
-  int32_t z; // mm
+  int32_t x;  // mm
+  int32_t y;  // mm
+  int32_t z;  // mm
 } LivoxLidarInstallAttitude;
 
-typedef struct {
+typedef struct
+{
   int32_t yaw_start;
   int32_t yaw_stop;
   int32_t pitch_start;
@@ -279,55 +301,64 @@ typedef struct {
   uint32_t rsvd;
 } FovCfg;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarDetectNormal = 0x00,
   kLivoxLidarDetectSensitive = 0x01
 } LivoxLidarDetectMode;
 
-typedef struct {
+typedef struct
+{
   uint8_t in0;
   uint8_t int1;
   uint8_t out0;
   uint8_t out1;
 } FuncIOCfg;
 
-typedef struct {
+typedef struct
+{
   bool lidar_log_enable;
   uint32_t lidar_log_cache_size;
   char lidar_log_path[1024];
 } LivoxLidarLoggerCfgInfo;
 
-typedef struct {
+typedef struct
+{
   char ip_addr[16];  /**< IP address. */
   char net_mask[16]; /**< Subnet mask. */
   char gw_addr[16];  /**< Gateway address. */
 } LivoxLidarIpInfo;
 
-typedef struct {
-  char host_ip_addr[16];  /**< IP address. */
+typedef struct
+{
+  char host_ip_addr[16]; /**< IP address. */
   uint16_t host_state_info_port;
   uint16_t lidar_state_info_port;
 } HostStateInfoIpInfo;
 
-typedef struct {
-  char host_ip_addr[16];  /**< IP address. */
+typedef struct
+{
+  char host_ip_addr[16]; /**< IP address. */
   uint16_t host_point_data_port;
   uint16_t lidar_point_data_port;
 } HostPointIPInfo;
 
-typedef struct {
-  char host_ip_addr[16];  /**< IP address. */
-  uint16_t host_imu_data_port; // resv
-  uint16_t lidar_imu_data_port; // resv
+typedef struct
+{
+  char host_ip_addr[16];         /**< IP address. */
+  uint16_t host_imu_data_port;   // resv
+  uint16_t lidar_imu_data_port;  // resv
 } HostImuDataIPInfo;
 
-typedef struct {
-  char ip_addr[16];  /**< IP address. */
+typedef struct
+{
+  char ip_addr[16]; /**< IP address. */
   uint16_t dst_port;
   uint16_t src_port;
 } LivoxIpCfg;
 
-typedef struct {
+typedef struct
+{
   uint8_t pcl_data_type;
   uint8_t pattern_mode;
   uint8_t dual_emit_en;
@@ -351,67 +382,71 @@ typedef struct {
   uint64_t status_code;
 } LivoxLidarStateInfo;
 
-typedef struct {
-  uint8_t             pcl_data_type;            // 0x0000
-  uint8_t             pattern_mode;             // 0x0001
-  uint8_t             dual_emit_en;             // 0x0002
-  uint8_t             point_send_en;            // 0x0003  
-  LivoxLidarIpInfo    lidar_ipcfg;              // 0x0004
-  HostStateInfoIpInfo host_state_info;          // 0x0005
-  HostPointIPInfo     pointcloud_host_ipcfg;    // 0x0006
-  HostImuDataIPInfo   imu_host_ipcfg;           // 0x0007
-  LivoxIpCfg          ctl_host_ipcfg;           // 0x0008
-  LivoxIpCfg          log_host_ipcfg;           // 0x0009
-  
-  int32_t             vehicle_speed;            // 0x0010
-  int32_t             environment_temp;         // 0x0011  
-  LivoxLidarInstallAttitude install_attitude;   // 0x0012
-  uint32_t            blind_spot_set;           // 0x0013
-  uint8_t             frame_rate;               // 0x0014
-  FovCfg              fov_cfg0;                 // 0x0015
-  FovCfg              fov_cfg1;                 // 0x0016
-  uint8_t             fov_cfg_en;               // 0x0017 
-  uint8_t             detect_mode;              // 0x0018
-  uint8_t             func_io_cfg[4];           // 0x0019
-  uint8_t             work_tgt_mode;            // 0x001A
-  uint8_t             glass_heat;               // 0x001B
-  uint8_t             imu_data_en;              // 0x001C
-  uint8_t             fusa_en;                  // 0x001D
+typedef struct
+{
+  uint8_t pcl_data_type;                  // 0x0000
+  uint8_t pattern_mode;                   // 0x0001
+  uint8_t dual_emit_en;                   // 0x0002
+  uint8_t point_send_en;                  // 0x0003
+  LivoxLidarIpInfo lidar_ipcfg;           // 0x0004
+  HostStateInfoIpInfo host_state_info;    // 0x0005
+  HostPointIPInfo pointcloud_host_ipcfg;  // 0x0006
+  HostImuDataIPInfo imu_host_ipcfg;       // 0x0007
+  LivoxIpCfg ctl_host_ipcfg;              // 0x0008
+  LivoxIpCfg log_host_ipcfg;              // 0x0009
 
-  char                sn[16];                   // 0x8000
-  char                product_info[64];         // 0x8001
-  uint8_t             version_app[4];           // 0x8002
-  uint8_t             version_loader[4];        // 0x8003
-  uint8_t             version_hardware[4];      // 0x8004
-  uint8_t             mac[6];                   // 0x8005
-  uint8_t             cur_work_state;           // 0x8006
-  int32_t             core_temp;                // 0x8007
-  uint32_t            powerup_cnt;              // 0x8008
-  uint64_t            local_time_now;           // 0x8009
-  uint64_t            last_sync_time;           // 0x800A
-  int64_t             time_offset;              // 0x800B
-  uint8_t             time_sync_type;           // 0x800C
-  uint8_t             status_code[32];          // 0x800D
-  uint16_t            lidar_diag_status;        // 0x800E
-  uint8_t             lidar_flash_status;       // 0x800F
-  uint8_t             fw_type;                  // 0x8010
-  uint32_t            hms_code[8];              // 0x8011
-  uint8_t             ROI_Mode;                 // 0xFFFE
+  int32_t vehicle_speed;                       // 0x0010
+  int32_t environment_temp;                    // 0x0011
+  LivoxLidarInstallAttitude install_attitude;  // 0x0012
+  uint32_t blind_spot_set;                     // 0x0013
+  uint8_t frame_rate;                          // 0x0014
+  FovCfg fov_cfg0;                             // 0x0015
+  FovCfg fov_cfg1;                             // 0x0016
+  uint8_t fov_cfg_en;                          // 0x0017
+  uint8_t detect_mode;                         // 0x0018
+  uint8_t func_io_cfg[4];                      // 0x0019
+  uint8_t work_tgt_mode;                       // 0x001A
+  uint8_t glass_heat;                          // 0x001B
+  uint8_t imu_data_en;                         // 0x001C
+  uint8_t fusa_en;                             // 0x001D
+
+  char sn[16];                  // 0x8000
+  char product_info[64];        // 0x8001
+  uint8_t version_app[4];       // 0x8002
+  uint8_t version_loader[4];    // 0x8003
+  uint8_t version_hardware[4];  // 0x8004
+  uint8_t mac[6];               // 0x8005
+  uint8_t cur_work_state;       // 0x8006
+  int32_t core_temp;            // 0x8007
+  uint32_t powerup_cnt;         // 0x8008
+  uint64_t local_time_now;      // 0x8009
+  uint64_t last_sync_time;      // 0x800A
+  int64_t time_offset;          // 0x800B
+  uint8_t time_sync_type;       // 0x800C
+  uint8_t status_code[32];      // 0x800D
+  uint16_t lidar_diag_status;   // 0x800E
+  uint8_t lidar_flash_status;   // 0x800F
+  uint8_t fw_type;              // 0x8010
+  uint32_t hms_code[8];         // 0x8011
+  uint8_t ROI_Mode;             // 0xFFFE
 } DirectLidarStateInfo;
 
-typedef struct {
+typedef struct
+{
   uint8_t ret_code;
   LivoxLidarStateInfo livox_lidar_state_info;
 } LivoxLidarQueryInternalInfoResponse;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarStopPowerOnHeatingOrDiagnosticHeating = 0x00,
   kLivoxLidarTurnOnHeating = 0x01,
   kLivoxLidarDiagnosticHeating = 0x02,
   kLivoxLidarStopSelfHeating = 0x03
 } LivoxLidarGlassHeat;
 
-typedef struct {
+typedef struct
+{
   uint8_t log_send_method;
   uint16_t log_id;
   uint16_t log_frequency;
@@ -419,30 +454,36 @@ typedef struct {
   uint8_t check_code;
 } LivoxLidarLogParam;
 
-typedef struct {
+typedef struct
+{
   uint8_t ret_code;
 } LivoxLidarLoggerResponse;
 
-typedef struct {
+typedef struct
+{
   uint16_t timeout; /**< delay reboot time */
 } LivoxLidarRebootRequest;
 
-typedef struct {
+typedef struct
+{
   uint8_t ret_code; /**< Return code. */
 } LivoxLidarRebootResponse;
 
-typedef struct {
+typedef struct
+{
   uint8_t data[16];
 } LivoxLidarResetRequest;
 
-typedef struct {
+typedef struct
+{
   uint8_t ret_code;
 } LivoxLidarResetResponse;
 
 /**
  * Upgrade related data struct
  */
-typedef enum {
+typedef enum
+{
   kLivoxLidarUpgradeIdle = 0,
   kLivoxLidarUpgradeRequest = 1,
   kLivoxLidarUpgradeXferFirmware = 2,
@@ -454,7 +495,8 @@ typedef enum {
   kLivoxLidarUpgradeUndef = 8
 } LivoxLidarFsmState;
 
-typedef enum {
+typedef enum
+{
   kLivoxLidarEventRequestUpgrade = 0,
   kLivoxLidarEventXferFirmware = 1,
   kLivoxLidarEventCompleteXferFirmware = 2,
@@ -466,13 +508,15 @@ typedef enum {
   kLivoxLidarEventUndef = 8
 } LivoxLidarFsmEvent;
 
-typedef struct {
+typedef struct
+{
   LivoxLidarFsmEvent state;
   uint8_t progress;
 } LivoxLidarUpgradeState;
 
-typedef struct {
-  uint8_t ret; // succ: 0, fail: 1
+typedef struct
+{
+  uint8_t ret;  // succ: 0, fail: 1
 } LivoxLidarRmcSyncTimeResponse;
 
 #pragma pack()
@@ -484,7 +528,8 @@ typedef struct {
  * @param data_num               number of points in data.
  * @param client_data            user data associated with the command.
  */
-typedef void (*LivoxLidarPointCloudCallBack)(const uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket* data, void* client_data);
+typedef void (*LivoxLidarPointCloudCallBack)(const uint32_t handle, const uint8_t dev_type,
+                                             LivoxLidarEthernetPacket* data, void* client_data);
 
 /**
  * Callback function for receiving point cloud data.
@@ -492,7 +537,8 @@ typedef void (*LivoxLidarPointCloudCallBack)(const uint32_t handle, const uint8_
  * @param data                   device's command data.
  * @param client_data            user data associated with the command.
  */
-typedef void (*LivoxLidarCmdObserverCallBack)(const uint32_t handle, const LivoxLidarCmdPacket* data, void* client_data);
+typedef void (*LivoxLidarCmdObserverCallBack)(const uint32_t handle, const LivoxLidarCmdPacket* data,
+                                              void* client_data);
 
 /**
  * Callback function for point cloud observer.
@@ -501,7 +547,8 @@ typedef void (*LivoxLidarCmdObserverCallBack)(const uint32_t handle, const Livox
  * @param data_num               number of points in data.
  * @param client_data            user data associated with the command.
  */
-typedef void (*LivoxLidarPointCloudObserver) (uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket *data, void *client_data);
+typedef void (*LivoxLidarPointCloudObserver)(uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket* data,
+                                             void* client_data);
 
 /**
  * Callback function for receiving IMU data.
@@ -509,24 +556,26 @@ typedef void (*LivoxLidarPointCloudObserver) (uint32_t handle, const uint8_t dev
  * @param data_num               number of IMU data.
  * @param client_data            user data associated with the command.
  */
-typedef void (*LivoxLidarImuDataCallback)(const uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket* data, void* client_data);
+typedef void (*LivoxLidarImuDataCallback)(const uint32_t handle, const uint8_t dev_type, LivoxLidarEthernetPacket* data,
+                                          void* client_data);
 
 /**
  * Callback function for receiving Status Info.
  * @param status_info            status info.
  * @param client_data            user data associated with the command.
  */
-typedef void(*LivoxLidarInfoCallback)(const uint32_t handle, const uint8_t dev_type, const char* info, void* client_data);
+typedef void (*LivoxLidarInfoCallback)(const uint32_t handle, const uint8_t dev_type, const char* info,
+                                       void* client_data);
 
 /**
  * Callback function for receiving Status Info.
  * @param status                 status info.
  * @param client_data            user data associated with the command.
  */
-typedef void(*LivoxLidarInfoChangeCallback)(const uint32_t handle, const LivoxLidarInfo* info, void* client_data);
+typedef void (*LivoxLidarInfoChangeCallback)(const uint32_t handle, const LivoxLidarInfo* info, void* client_data);
 
 typedef void (*QueryLivoxLidarInternalInfoCallback)(livox_status status, uint32_t handle,
-        LivoxLidarDiagInternalInfoResponse* response, void* client_data);
+                                                    LivoxLidarDiagInternalInfoResponse* response, void* client_data);
 
 /**
  * Callback function for receiving response from the lidar on the configuration of parameter.
@@ -535,8 +584,8 @@ typedef void (*QueryLivoxLidarInternalInfoCallback)(livox_status status, uint32_
  * @param  client_data            user data associated with the command.
  * @return kStatusSuccess on successful return, see \ref LivoxStatus for other error code.
  */
-typedef void (*LivoxLidarAsyncControlCallback)(livox_status status, uint32_t handle, 
-                                               LivoxLidarAsyncControlResponse *response, void *client_data);
+typedef void (*LivoxLidarAsyncControlCallback)(livox_status status, uint32_t handle,
+                                               LivoxLidarAsyncControlResponse* response, void* client_data);
 /**
  * Callback function for receiving the reset setting response from lidar.
  * @param  status                 status info.
@@ -544,8 +593,8 @@ typedef void (*LivoxLidarAsyncControlCallback)(livox_status status, uint32_t han
  * @param  client_data            user data associated with the command.
  * @return kStatusSuccess on successful return, see \ref LivoxStatus for other error code.
  */
-typedef void (*LivoxLidarResetCallback)(livox_status status, uint32_t handle, LivoxLidarResetResponse* response, void* client_data);
-
+typedef void (*LivoxLidarResetCallback)(livox_status status, uint32_t handle, LivoxLidarResetResponse* response,
+                                        void* client_data);
 
 /**
  * Callback function for receiving the log setting response from lidar.
@@ -554,8 +603,8 @@ typedef void (*LivoxLidarResetCallback)(livox_status status, uint32_t handle, Li
  * @param  client_data            user data associated with the command.
  * @return kStatusSuccess on successful return, see \ref LivoxStatus for other error code.
  */
-typedef void (*LivoxLidarLoggerCallback)(livox_status status, uint32_t handle,
-                                         LivoxLidarLoggerResponse* response, void* client_data);
+typedef void (*LivoxLidarLoggerCallback)(livox_status status, uint32_t handle, LivoxLidarLoggerResponse* response,
+                                         void* client_data);
 
 /**
  * Callback function for receiving the Reboot setting response from lidar.
@@ -564,9 +613,10 @@ typedef void (*LivoxLidarLoggerCallback)(livox_status status, uint32_t handle,
  * @param  client_data            user data associated with the command.
  * @return kStatusSuccess on successful return, see \ref LivoxStatus for other error code.
  */
-typedef void (*LivoxLidarRebootCallback)(livox_status status, uint32_t handle, LivoxLidarRebootResponse* response, void* client_data);
+typedef void (*LivoxLidarRebootCallback)(livox_status status, uint32_t handle, LivoxLidarRebootResponse* response,
+                                         void* client_data);
 
-typedef void (*OnLivoxLidarUpgradeProgressCallback)(uint32_t handle, LivoxLidarUpgradeState state, void *client_data);
+typedef void (*OnLivoxLidarUpgradeProgressCallback)(uint32_t handle, LivoxLidarUpgradeState state, void* client_data);
 
 /**
  * Callback function for receiving point cloud data.
@@ -575,6 +625,7 @@ typedef void (*OnLivoxLidarUpgradeProgressCallback)(uint32_t handle, LivoxLidarU
  * @param data                   device's command data.
  * @param client_data            user data associated with the command.
  */
-typedef void (*LivoxLidarRmcSyncTimeCallBack)(livox_status status, uint32_t handle, LivoxLidarRmcSyncTimeResponse* data, void* client_data);
+typedef void (*LivoxLidarRmcSyncTimeCallBack)(livox_status status, uint32_t handle, LivoxLidarRmcSyncTimeResponse* data,
+                                              void* client_data);
 
 #endif  // LIVOX_LIDAR_DEF_H_

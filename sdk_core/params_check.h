@@ -36,26 +36,29 @@
 
 #include "command_handler/build_request.h"
 
-namespace livox {
-namespace lidar {
-
-class ParamsCheck {
- public:
+namespace livox
+{
+namespace lidar
+{
+class ParamsCheck
+{
+public:
   ParamsCheck(std::shared_ptr<std::vector<LivoxLidarCfg>>& lidars_cfg_ptr,
-      std::shared_ptr<std::vector<LivoxLidarCfg>>& custom_lidars_cfg_ptr);
+              std::shared_ptr<std::vector<LivoxLidarCfg>>& custom_lidars_cfg_ptr);
   bool Check();
- private:
+
+private:
   bool CheckLidarIp();
   bool CheckLidarMulticastIp();
   void CheckLidarPort();
   void CheckPort(const uint8_t dev_type, LivoxLidarNetInfo& lidar_net_info);
- private:
+
+private:
   std::shared_ptr<std::vector<LivoxLidarCfg>> lidars_cfg_ptr_;
   std::shared_ptr<std::vector<LivoxLidarCfg>> custom_lidars_cfg_ptr_;
 };
 
-} // namespace lidar
-} // namespace livox
+}  // namespace lidar
+}  // namespace livox
 
-#endif // LIVOX_PARSE_CFG_FILE_H_
-
+#endif  // LIVOX_PARSE_CFG_FILE_H_

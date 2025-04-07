@@ -41,22 +41,26 @@
 
 #include "synchro.h"
 
-static void WorkModeCallback(livox_status status, uint32_t handle,LivoxLidarAsyncControlResponse *response, void *client_data) {
-  if (response == nullptr) {
+static void WorkModeCallback(livox_status status, uint32_t handle, LivoxLidarAsyncControlResponse* response,
+                             void* client_data)
+{
+  if (response == nullptr)
+  {
     return;
   }
-  printf("WorkModeCallack, status:%u, handle:%u, ret_code:%u, error_key:%u",
-      status, handle, response->ret_code, response->error_key);
-
+  printf("WorkModeCallack, status:%u, handle:%u, ret_code:%u, error_key:%u", status, handle, response->ret_code,
+         response->error_key);
 }
 
-static void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, void* client_data) {
-  if (info == nullptr) {
+static void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo* info, void* client_data)
+{
+  if (info == nullptr)
+  {
     printf("lidar info change callback failed, the info is nullptr.\n");
     return;
-  } 
+  }
   printf("LidarInfoChangeCallback Lidar handle: %u SN: %s\n", handle, info->sn);
-  
+
   // set the work mode to kLivoxLidarNormal, namely start the lidar
   SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeCallback, nullptr);
 
@@ -67,50 +71,61 @@ static void LidarInfoChangeCallback(const uint32_t handle, const LivoxLidarInfo*
   synchro.SetPortName("/dev/ttyUSB0");
 #endif
 
-/** Set Synchro's Baudrate: 9600. */
+  /** Set Synchro's Baudrate: 9600. */
   synchro.SetBaudRate(BR9600);
-/** Set Synchro's Parity: No parity (8N1). */
+  /** Set Synchro's Parity: No parity (8N1). */
   synchro.SetParity(P_8N1);
-/** SyncTimer Callback will trigger when Synchro's GPRMC/GNRMC signal is ready. */
+  /** SyncTimer Callback will trigger when Synchro's GPRMC/GNRMC signal is ready. */
   synchro.SetSyncTimerCallback([handle](const char* rmc, uint16_t rmc_length) {
     printf("GPRMC is:%s", rmc);
-    SetLivoxLidarRmcSyncTime(handle, rmc, rmc_length, [](livox_status status, uint32_t handle, LivoxLidarRmcSyncTimeResponse* data, void* client_data){
-      std::cout << "Lidar handle:" << handle << " response is: " << +data->ret << std::endl;
-    }, nullptr);
+    SetLivoxLidarRmcSyncTime(
+        handle, rmc, rmc_length,
+        [](livox_status status, uint32_t handle, LivoxLidarRmcSyncTimeResponse* data, void* client_data) {
+          std::cout << "Lidar handle:" << handle << " response is: " << +data->ret << std::endl;
+        },
+        nullptr);
     std::this_thread::sleep_for(std::chrono::milliseconds(800));
   });
-  if (synchro.Start()) {
+  if (synchro.Start())
+  {
     printf("Synchro start success.");
-  } else {
+  }
+  else
+  {
     printf("Synchro start failed.");
     return;
   }
 }
 
-static void LivoxLidarPushMsgCallback(const uint32_t handle, const uint8_t dev_type, const char* info, void* client_data) {
+static void LivoxLidarPushMsgCallback(const uint32_t handle, const uint8_t dev_type, const char* info,
+                                      void* client_data)
+{
   struct in_addr tmp_addr;
-  tmp_addr.s_addr = handle;  
+  tmp_addr.s_addr = handle;
   std::cout << "handle: " << handle << ", ip: " << inet_ntoa(tmp_addr) << ", push msg info: " << std::endl;
   std::cout << info << std::endl;
   return;
 }
 
-int main(int argc, const char *argv[]) {
-  if (argc != 2) {
+int main(int argc, const char* argv[])
+{
+  if (argc != 2)
+  {
     printf("Params Invalid, must input config path.\n");
     return -1;
   }
   const std::string path = argv[1];
 
   // REQUIRED, to init Livox SDK2
-  if (!LivoxLidarSdkInit(path.c_str())) {
+  if (!LivoxLidarSdkInit(path.c_str()))
+  {
     printf("Livox Init Failed\n");
     LivoxLidarSdkUninit();
     return -1;
   }
-  
+
   SetLivoxLidarInfoCallback(LivoxLidarPushMsgCallback, nullptr);
-  
+
   // REQUIRED, to get a handle to targeted lidar and set its work mode to NORMAL
   SetLivoxLidarInfoChangeCallback(LidarInfoChangeCallback, nullptr);
 

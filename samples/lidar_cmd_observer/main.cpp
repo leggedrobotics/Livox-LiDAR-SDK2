@@ -41,39 +41,47 @@
 
 #include "FastCRC/FastCRC.h"
 
-int main(int argc, const char *argv[]) {
-  if (argc != 2) {
+int main(int argc, const char* argv[])
+{
+  if (argc != 2)
+  {
     printf("Params Invalid, must input config path.\n");
     return -1;
   }
   const std::string path = argv[1];
 
   // REQUIRED, to init Livox SDK2
-  if (!LivoxLidarSdkInit(path.c_str())) {
+  if (!LivoxLidarSdkInit(path.c_str()))
+  {
     printf("Livox Init Failed\n");
     LivoxLidarSdkUninit();
     return -1;
   }
 
-  LivoxLidarAddCmdObserver([](const uint32_t handle, const LivoxLidarCmdPacket* data, void* client_data) {
-    static FastCRC16 crc_16;
-    static FastCRC32 crc_32;
-    static const uint8_t offset_of_crc16 = offsetof(LivoxLidarCmdPacket, crc16_h);
-    static const uint8_t offset_of_data  = offsetof(LivoxLidarCmdPacket, data);
-    struct in_addr tmp_addr;
-    tmp_addr.s_addr = handle;
-    if (crc_16.ccitt(reinterpret_cast<const uint8_t*>(data), offset_of_crc16) != data->crc16_h) {
-      printf("Error: liadr: %s, crc16 check failure.\n", inet_ntoa(tmp_addr));
-      exit(-1);
-    }
-    if (crc_32.crc32(reinterpret_cast<const uint8_t*>(data) + offset_of_data, data->length - offset_of_data) != data->crc32_d) {
-      printf("Error: liadr: %s, crc32 check failure.\n", inet_ntoa(tmp_addr));
-      exit(-1);
-    }
-    printf("--------------------------------------------------\n");
-    printf("liadr: %s, crc check success.\n", inet_ntoa(tmp_addr));
-    printf("--------------------------------------------------\n");
-  }, nullptr);
+  LivoxLidarAddCmdObserver(
+      [](const uint32_t handle, const LivoxLidarCmdPacket* data, void* client_data) {
+        static FastCRC16 crc_16;
+        static FastCRC32 crc_32;
+        static const uint8_t offset_of_crc16 = offsetof(LivoxLidarCmdPacket, crc16_h);
+        static const uint8_t offset_of_data = offsetof(LivoxLidarCmdPacket, data);
+        struct in_addr tmp_addr;
+        tmp_addr.s_addr = handle;
+        if (crc_16.ccitt(reinterpret_cast<const uint8_t*>(data), offset_of_crc16) != data->crc16_h)
+        {
+          printf("Error: liadr: %s, crc16 check failure.\n", inet_ntoa(tmp_addr));
+          exit(-1);
+        }
+        if (crc_32.crc32(reinterpret_cast<const uint8_t*>(data) + offset_of_data, data->length - offset_of_data) !=
+            data->crc32_d)
+        {
+          printf("Error: liadr: %s, crc32 check failure.\n", inet_ntoa(tmp_addr));
+          exit(-1);
+        }
+        printf("--------------------------------------------------\n");
+        printf("liadr: %s, crc check success.\n", inet_ntoa(tmp_addr));
+        printf("--------------------------------------------------\n");
+      },
+      nullptr);
 
 #ifdef WIN32
   Sleep(300000);
